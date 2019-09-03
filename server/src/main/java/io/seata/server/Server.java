@@ -65,8 +65,6 @@ public class Server {
         System.setProperty(ConfigurationKeys.STORE_MODE, parameterParser.getStoreMode());
 
         RpcServer rpcServer = new RpcServer(WORKING_THREADS);
-        //server host
-        rpcServer.setHost(parameterParser.getHost());
         //server port
         rpcServer.setListenPort(parameterParser.getPort());
 
