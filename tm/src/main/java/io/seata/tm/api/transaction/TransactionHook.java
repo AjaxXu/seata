@@ -16,6 +16,7 @@
 package io.seata.tm.api.transaction;
 
 /**
+ * 事务Hook接口
  * @author guoyao
  * @date 2019/3/4
  */

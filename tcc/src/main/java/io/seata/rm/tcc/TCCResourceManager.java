@@ -35,6 +35,7 @@ import io.seata.rm.tcc.api.BusinessActionContext;
 
 /**
  * TCC resource manager
+ * TCC 资源管理器
  *
  * @author zhangsen
  */
@@ -43,7 +44,7 @@ public class TCCResourceManager extends AbstractResourceManager {
     /**
      * TCC resource cache
      */
-    private Map<String, Resource> tccResourceCache = new ConcurrentHashMap<String, Resource>();
+    private Map<String, Resource> tccResourceCache = new ConcurrentHashMap<>();
 
     /**
      * Instantiates a new Tcc resource manager.
@@ -53,6 +54,7 @@ public class TCCResourceManager extends AbstractResourceManager {
 
     /**
      * registry TCC resource
+     * 注册TCC 资源
      *
      * @param resource The resource to be managed.
      */
@@ -60,6 +62,7 @@ public class TCCResourceManager extends AbstractResourceManager {
     public void registerResource(Resource resource) {
         TCCResource tccResource = (TCCResource)resource;
         tccResourceCache.put(tccResource.getResourceId(), tccResource);
+        // 调用父类的方法通过 RPC 注册到远端
         super.registerResource(tccResource);
     }
 
@@ -71,21 +74,23 @@ public class TCCResourceManager extends AbstractResourceManager {
     /**
      * TCC branch commit
      *
-     * @param branchType
+     * @param branchType    分支事务类型
      * @param xid             Transaction id.
      * @param branchId        Branch id.
      * @param resourceId      Resource id.
      * @param applicationData Application data bind with this branch.
-     * @return
+     * @return 分支状态
      * @throws TransactionException
      */
     @Override
     public BranchStatus branchCommit(BranchType branchType, String xid, long branchId, String resourceId,
                                      String applicationData) throws TransactionException {
+        // 根据 resourceId 找出内存中保留的 TCCResource 对象
         TCCResource tccResource = (TCCResource)tccResourceCache.get(resourceId);
         if (tccResource == null) {
             throw new ShouldNeverHappenException("TCC resource is not exist, resourceId:" + resourceId);
         }
+        // 获取bean 和 commit方法
         Object targetTCCBean = tccResource.getTargetBean();
         Method commitMethod = tccResource.getCommitMethod();
         if (targetTCCBean == null || commitMethod == null) {
@@ -164,6 +169,7 @@ public class TCCResourceManager extends AbstractResourceManager {
 
     /**
      * transfer tcc applicationData to BusinessActionContext
+     * 将applicationData转换为BusinessActionContext
      *
      * @param xid             the xid
      * @param branchId        the branch id

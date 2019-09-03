@@ -22,6 +22,7 @@ import io.seata.server.UUIDGenerator;
 
 /**
  * The type Session helper.
+ * Session辅助类
  *
  * @author sharajava
  */

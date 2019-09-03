@@ -21,6 +21,7 @@ import io.seata.core.protocol.MessageType;
 
 /**
  * The type Branch register response.
+ * 分支注册响应结果
  *
  * @author jimin.jm @alibaba-inc.com
  */

@@ -17,6 +17,7 @@ package io.seata.core.codec;
 
 /**
  * The enum serialize type.
+ * 序列化类型
  *
  * @author leizhiyuan
  */

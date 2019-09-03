@@ -24,6 +24,7 @@ import java.util.concurrent.TimeoutException;
 
 /**
  * The type Message future.
+ * 信息future
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /10/9

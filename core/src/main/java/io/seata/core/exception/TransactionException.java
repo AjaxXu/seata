@@ -17,6 +17,7 @@ package io.seata.core.exception;
 
 /**
  * The type Transaction exception.
+ * 事务异常
  *
  * @author sharajava
  */

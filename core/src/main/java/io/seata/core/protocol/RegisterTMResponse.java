@@ -19,6 +19,7 @@ import java.io.Serializable;
 
 /**
  * The type Register tm response.
+ * 注册TM的响应信息
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /10/15

@@ -17,6 +17,7 @@ package io.seata.core.protocol;
 
 /**
  * The interface Merge message.
+ * 合并信息，只是一个标识类接口
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /10/9

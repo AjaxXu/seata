@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The Abstract RM event handler
+ * RM事件处理器的抽象类
  *
  * @author sharajava
  */
@@ -80,6 +81,7 @@ public abstract class AbstractRMHandler extends AbstractExceptionHandler
 
     /**
      * Do branch commit.
+     * 分支提交
      *
      * @param request  the request
      * @param response the response

@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The type Rm message listener.
+ * 客户端消息监听器，这里是在rm端
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /10/11
@@ -65,11 +66,11 @@ public class RmMessageListener implements ClientMessageListener {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("onMessage:" + msg);
         }
-        if (msg instanceof BranchCommitRequest) {
+        if (msg instanceof BranchCommitRequest) { // 分支提交请求
             handleBranchCommit(request, serverAddress, (BranchCommitRequest)msg, sender);
-        } else if (msg instanceof BranchRollbackRequest) {
+        } else if (msg instanceof BranchRollbackRequest) { // 分支回滚请求
             handleBranchRollback(request, serverAddress, (BranchRollbackRequest)msg, sender);
-        }else if (msg instanceof UndoLogDeleteRequest) {
+        }else if (msg instanceof UndoLogDeleteRequest) { // Undo日志删除请求
             handleUndoLogDelete((UndoLogDeleteRequest) msg);
         }
     }
@@ -85,7 +86,7 @@ public class RmMessageListener implements ClientMessageListener {
         try {
             sender.sendResponse(request, serverAddress, resultMessage);
         } catch (Throwable throwable) {
-            LOGGER.error("", "send response error", throwable);
+            LOGGER.error("send response error", throwable);
         }
     }
 
@@ -95,13 +96,16 @@ public class RmMessageListener implements ClientMessageListener {
 
         BranchCommitResponse resultMessage = null;
         try {
+            // handler先处理
             resultMessage = (BranchCommitResponse)handler.onRequest(branchCommitRequest, null);
+            // 由sender发送
             sender.sendResponse(request, serverAddress, resultMessage);
         } catch (Exception e) {
             LOGGER.error(FrameworkErrorCode.NetOnMessage.getErrCode(), e.getMessage(), e);
             if (resultMessage == null) {
                 resultMessage = new BranchCommitResponse();
             }
+            // 返回处理失败的结果
             resultMessage.setResultCode(ResultCode.Failed);
             resultMessage.setMsg(e.getMessage());
             sender.sendResponse(request, serverAddress, resultMessage);

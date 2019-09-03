@@ -19,6 +19,7 @@ import io.seata.core.exception.TransactionException;
 
 /**
  * Transaction Manager.
+ * 事务管理器接口
  *
  * Define a global transaction and control it.
  *

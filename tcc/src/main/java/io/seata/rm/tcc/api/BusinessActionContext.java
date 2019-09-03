@@ -20,16 +20,17 @@ import java.util.Map;
 
 /**
  * The type Business action context.
+ * 业务事件上下文
  */
 public class BusinessActionContext implements Serializable {
 
     private static final long serialVersionUID = 6539226288677737991L;
 
-    private String xid;
+    private String xid; // 事务ID
 
-    private String branchId;
+    private String branchId; // 分支ID
 
-    private String actionName;
+    private String actionName; // 事件名称
 
     private Map<String, Object> actionContext;
 

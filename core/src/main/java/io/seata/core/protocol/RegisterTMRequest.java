@@ -19,6 +19,7 @@ import java.io.Serializable;
 
 /**
  * The type Register tm request.
+ * 注册 tm 请求
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /10/15

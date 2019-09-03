@@ -19,6 +19,7 @@ import java.util.List;
 
 /**
  * The interface Load balance.
+ * Load balance类
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2019 /02/12

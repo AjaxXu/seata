@@ -19,6 +19,7 @@ import io.seata.core.protocol.MessageType;
 
 /**
  * The type Global rollback response.
+ * 全局事务回滚的响应结果
  *
  * @author jimin.jm @alibaba-inc.com
  */

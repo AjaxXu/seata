@@ -22,6 +22,7 @@ import io.netty.channel.epoll.EpollServerSocketChannel;
 
 /**
  * The type Netty server config.
+ * Netty 服务端配置
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /9/12
@@ -29,7 +30,7 @@ import io.netty.channel.epoll.EpollServerSocketChannel;
 public class NettyServerConfig extends NettyBaseConfig {
 
     private int serverSelectorThreads = WORKER_THREAD_SIZE;
-    private int serverSocketSendBufSize = 153600;
+    private int serverSocketSendBufSize = 153600; // 150k
     private int serverSocketResvBufSize = 153600;
     private int serverWorkerThreads = WORKER_THREAD_SIZE;
     private int soBackLogSize = 1024;

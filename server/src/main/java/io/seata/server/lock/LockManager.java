@@ -20,6 +20,7 @@ import io.seata.server.session.BranchSession;
 
 /**
  * The interface Lock manager.
+ * 锁管理器
  *
  * @author sharajava
  */
@@ -45,6 +46,7 @@ public interface LockManager {
 
     /**
      * Is lockable boolean.
+     * 是否锁住
      *
      * @param xid        the xid
      * @param resourceId the resource id

@@ -21,6 +21,7 @@ import java.util.List;
 
 /**
  * The type Merged warp message.
+ * 包装合并的信息
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /10/9

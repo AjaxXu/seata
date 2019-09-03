@@ -17,6 +17,7 @@ package io.seata.metrics;
 
 /**
  * Clock interface for metrics
+ * 时钟接口
  *
  * @author zhengyangyong
  */

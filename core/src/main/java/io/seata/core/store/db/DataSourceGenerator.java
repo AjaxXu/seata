@@ -19,6 +19,7 @@ import javax.sql.DataSource;
 
 /**
  * The interface Data source generator.
+ * Data source生成器
  *
  * @author zhangsen
  * @date 2019 /4/24

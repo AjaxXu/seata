@@ -39,7 +39,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeoutException;
 
 /**
- * The type Abstract rpc server.
+ * The type rpc server.
+ * 远程调用服务器
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /10/15
@@ -50,6 +51,7 @@ public class RpcServer extends AbstractRpcRemotingServer implements ServerMessag
 
     /**
      * The Server message listener.
+     * 服务端消息监听器
      */
     protected ServerMessageListener serverMessageListener;
 
@@ -245,7 +247,7 @@ public class RpcServer extends AbstractRpcRemotingServer implements ServerMessag
      * @throws TimeoutException the timeout exception
      */
     @Override
-    public Object sendASyncRequest(Channel channel, Object message) throws IOException, TimeoutException {
+    public Object sendAsyncRequest(Channel channel, Object message) throws IOException, TimeoutException {
        return sendAsyncRequestWithoutResponse(channel, message);
     }
 

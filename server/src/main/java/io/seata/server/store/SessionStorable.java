@@ -17,6 +17,7 @@ package io.seata.server.store;
 
 /**
  * The interface Session storable.
+ * Session存储接口
  *
  * @author jimin.jm @alibaba-inc.com
  */

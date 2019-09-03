@@ -39,6 +39,7 @@ import io.seata.server.session.SessionHolder;
 
 /**
  * The type Abstract tc inbound handler.
+ * 事务协调者 inbound处理器的抽象类
  *
  * @author sharajava
  */

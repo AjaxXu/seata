@@ -18,6 +18,7 @@ package io.seata.core.protocol.transaction;
 
 /**
  * The type Abstract transaction request to rm.
+ * 到rm的事务请求的抽象类
  *
  * @author sharajava
  */

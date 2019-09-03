@@ -28,6 +28,7 @@ import io.seata.common.exception.ShouldNeverHappenException;
 
 /**
  * The type String utils.
+ * String 辅助类
  *
  * @author jimin.jm @alibaba-inc.com
  * @author Geng Zhang

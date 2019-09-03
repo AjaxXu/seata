@@ -19,6 +19,7 @@ import io.seata.common.util.StringUtils;
 
 /**
  * the TCC method result
+ * TCC 方法结果
  *
  * @author zhangsen
  */

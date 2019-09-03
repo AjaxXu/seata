@@ -23,6 +23,7 @@ import io.seata.common.util.NetUtil;
 
 /**
  * The type Version.
+ * 版本
  *
  * @author jimin.jm @alibaba-inc.com
  */

@@ -17,6 +17,7 @@ package io.seata.core.rpc.netty;
 
 /**
  * The enum Transport server type.
+ * 传输服务器类型
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /9/10

@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
 
 /**
  * The type Data base lock store.
+ * 数据库存储锁
  *
  * @author zhangsen
  * @date 2019 /4/25
@@ -134,9 +135,10 @@ public class LockStoreDataBaseDAO implements LockStore, Initialize {
                         Long dbBranchId = rs.getLong(ServerTableColumnsName.LOCK_TABLE_BRANCH_ID);
                         LOGGER.info("Global lock on [{}:{}] is holding by xid {} branchId {}", dbTableName, dbPk, dbXID, dbBranchId);
                     }
-                    canLock &= false;
+                    canLock = false;
                     break;
                 }
+                // 添加到已存在的行键里
                 dbExistedRowKeys.add(rs.getString(ServerTableColumnsName.LOCK_TABLE_ROW_KEY));
             }
 

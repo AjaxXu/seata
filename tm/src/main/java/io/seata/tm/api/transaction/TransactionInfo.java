@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 /**
+ * 事务信息
  * @author guoyao
  * @date 2019/4/17
  */
@@ -56,6 +57,7 @@ public final class TransactionInfo implements Serializable {
         this.rollbackRules = rollbackRules;
     }
 
+    // 判断是否在 ex 回滚
     public boolean rollbackOn(Throwable ex) {
 
         RollbackRule winner = null;
@@ -63,6 +65,7 @@ public final class TransactionInfo implements Serializable {
 
         if (this.rollbackRules != null) {
             for (RollbackRule rule : this.rollbackRules) {
+                // 找打ex的深度，从子类开始查找
                 int depth = rule.getDepth(ex);
                 if (depth >= 0 && depth < deepest) {
                     deepest = depth;
@@ -71,6 +74,6 @@ public final class TransactionInfo implements Serializable {
             }
         }
 
-        return winner == null || !(winner instanceof NoRollbackRule);
+        return !(winner instanceof NoRollbackRule);
     }
 }

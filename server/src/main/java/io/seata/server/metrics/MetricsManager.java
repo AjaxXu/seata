@@ -27,6 +27,7 @@ import io.seata.server.event.EventBusManager;
 
 /**
  * Metrics manager for init
+ * 监控指标管理器
  *
  * @author zhengyangyong
  */

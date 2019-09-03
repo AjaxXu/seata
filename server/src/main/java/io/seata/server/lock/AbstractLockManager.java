@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The type Abstract lock manager.
+ * 默认的锁管理器
  *
  * @author zhangsen
  * @data 2019 /4/25
@@ -40,6 +41,7 @@ public abstract class AbstractLockManager implements LockManager {
 
     /**
      * Collect row locks list.`
+     * 收集行锁
      *
      * @param branchSession the branch session
      * @return the list
@@ -86,12 +88,13 @@ public abstract class AbstractLockManager implements LockManager {
 
         String[] tableGroupedLockKeys = lockKey.split(";");
         for (String tableGroupedLockKey : tableGroupedLockKeys) {
+            // tableName:mergedPKs
             int idx = tableGroupedLockKey.indexOf(":");
             if (idx < 0) {
                 return locks;
             }
-            String tableName = tableGroupedLockKey.substring(0, idx);
-            String mergedPKs = tableGroupedLockKey.substring(idx + 1);
+            String tableName = tableGroupedLockKey.substring(0, idx); // 表名
+            String mergedPKs = tableGroupedLockKey.substring(idx + 1); // 主键s
             if (StringUtils.isBlank(mergedPKs)) {
                 return locks;
             }

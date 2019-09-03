@@ -27,6 +27,7 @@ import java.util.List;
 
 /**
  * The type File registry service.
+ * 文件注册
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2019 /02/12
@@ -79,10 +80,12 @@ public class FileRegistryServiceImpl implements RegistryService<ConfigChangeList
 
     @Override
     public List<InetSocketAddress> lookup(String key) throws Exception {
+        // service.vgroup_mapping.key
         String clusterName = CONFIG.getConfig(PREFIX_SERVICE_ROOT + CONFIG_SPLIT_CHAR + PREFIX_SERVICE_MAPPING + key);
         if (null == clusterName) {
             return null;
         }
+        // 获取终端列表，service.default.grouplist. 默认是127.0.0.1:8091
         String endpointStr = CONFIG.getConfig(
             PREFIX_SERVICE_ROOT + CONFIG_SPLIT_CHAR + clusterName + POSTFIX_GROUPLIST);
         if (StringUtils.isNullOrEmpty(endpointStr)) {

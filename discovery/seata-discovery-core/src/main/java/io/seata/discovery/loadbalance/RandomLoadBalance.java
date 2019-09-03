@@ -22,6 +22,7 @@ import io.seata.common.loader.LoadLevel;
 
 /**
  * The type Random load balance.
+ * 随机选择类型
  *
  * @author yuoyao
  * @date 2019 /02/14

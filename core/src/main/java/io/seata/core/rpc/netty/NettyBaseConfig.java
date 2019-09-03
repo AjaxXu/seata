@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The type Netty base config.
+ * netty基础配置
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /12/24
@@ -50,22 +51,26 @@ public class NettyBaseConfig {
     protected static final Configuration CONFIG = ConfigurationFactory.getInstance();
     /**
      * The constant BOSS_THREAD_PREFIX.
+     * file.conf中是 NettyBoss
      */
     protected static final String BOSS_THREAD_PREFIX = CONFIG.getConfig("transport.thread-factory.boss-thread-prefix");
 
     /**
      * The constant WORKER_THREAD_PREFIX.
+     * file.conf 中是  NettyServerNIOWorker
      */
     protected static final String WORKER_THREAD_PREFIX = CONFIG.getConfig(
         "transport.thread-factory.worker-thread-prefix");
 
     /**
      * The constant SHARE_BOSS_WORKER.
+     * file.conf中是 false
      */
     protected static final boolean SHARE_BOSS_WORKER = CONFIG.getBoolean("transport.thread-factory.share-boss-worker");
 
     /**
      * The constant WORKER_THREAD_SIZE.
+     * work线程数量，file.conf默认是8
      */
     protected static int WORKER_THREAD_SIZE;
 
@@ -76,21 +81,24 @@ public class NettyBaseConfig {
 
     /**
      * The constant SERVER_CHANNEL_CLAZZ.
+     * 服务端channel类
      */
     protected static final Class<? extends ServerChannel> SERVER_CHANNEL_CLAZZ;
     /**
      * The constant CLIENT_CHANNEL_CLAZZ.
+     * 客户端channel类
      */
     protected static final Class<? extends Channel> CLIENT_CHANNEL_CLAZZ;
 
     /**
      * The constant TRANSPORT_PROTOCOL_TYPE.
+     * 传输层协议类型
      */
     protected static final TransportProtocolType TRANSPORT_PROTOCOL_TYPE;
 
-    private static final int DEFAULT_WRITE_IDLE_SECONDS = 5;
+    private static final int DEFAULT_WRITE_IDLE_SECONDS = 5; // 默认写空闲时间
 
-    private static final int READIDLE_BASE_WRITEIDLE = 3;
+    private static final int READIDLE_BASE_WRITEIDLE = 3; // read空闲时间是write空闲时间的倍数
 
     /**
      * The constant MAX_WRITE_IDLE_SECONDS.
@@ -109,7 +117,7 @@ public class NettyBaseConfig {
 
     static {
         TRANSPORT_PROTOCOL_TYPE = TransportProtocolType.valueOf(CONFIG.getConfig("transport.type",TransportProtocolType.TCP.name()));
-        String workerThreadSize = CONFIG.getConfig("transport.thread-factory.worker-thread-size");
+        String workerThreadSize = CONFIG.getConfig("transport.thread-factory.worker-thread-size"); // file conf 里是8
         if (StringUtils.isNotBlank(workerThreadSize) && StringUtils.isNumeric(workerThreadSize)) {
             WORKER_THREAD_SIZE = Integer.parseInt(workerThreadSize);
         } else if (null != WorkThreadMode.getModeByName(workerThreadSize)) {
@@ -161,6 +169,7 @@ public class NettyBaseConfig {
             default:
                 throw new IllegalArgumentException("unsupported.");
         }
+        // 是否支持heartbeat
         boolean enableHeartbeat = CONFIG.getBoolean("transport.heartbeat", false);
         if (enableHeartbeat) {
             MAX_WRITE_IDLE_SECONDS = DEFAULT_WRITE_IDLE_SECONDS;
@@ -179,6 +188,7 @@ public class NettyBaseConfig {
 
     /**
      * The enum Work thread mode.
+     * work线程模式
      */
     enum WorkThreadMode {
 

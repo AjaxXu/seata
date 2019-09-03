@@ -25,6 +25,7 @@ import io.seata.core.rpc.Disposable;
 
 /**
  * The interface Session manager.
+ * Session管理器
  *
  * @author sharajava
  */
@@ -99,6 +100,7 @@ public interface SessionManager extends SessionLifecycleListener, Disposable {
 
     /**
      * Find global sessions list.
+     * 根据条件获得GlobalSession
      *
      * @param condition the condition
      * @return the list

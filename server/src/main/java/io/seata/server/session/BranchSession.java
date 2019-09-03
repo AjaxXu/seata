@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The type Branch session.
+ * 分支session
  *
  * @author sharajava
  */

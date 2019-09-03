@@ -22,6 +22,7 @@ import java.time.Duration;
 
 /**
  * The type Abstract configuration.
+ * 配置的抽象类
  *
  * @param <T> the type parameter
  * @author jimin.jm @alibaba-inc.com

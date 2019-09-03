@@ -16,6 +16,7 @@
 package io.seata.core.rpc;
 
 /**
+ * 销毁接口
  *
  * @author 563868273@qq.com
  * @date 2019/3/29

@@ -21,6 +21,7 @@ import io.seata.common.util.CollectionUtils;
 
 /**
  * The type Abstract load balance.
+ * load balance抽象类
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2019 /02/12

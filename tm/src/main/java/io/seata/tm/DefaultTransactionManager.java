@@ -36,6 +36,7 @@ import io.seata.core.rpc.netty.TmRpcClient;
 
 /**
  * The type Default transaction manager.
+ * 默认的TM
  *
  * @author sharajava
  */
@@ -47,6 +48,7 @@ public class DefaultTransactionManager implements TransactionManager {
         GlobalBeginRequest request = new GlobalBeginRequest();
         request.setTransactionName(name);
         request.setTimeout(timeout);
+        // 同步发送全局事务开始请求，获取 TC 下发的 xid
         GlobalBeginResponse response = (GlobalBeginResponse)syncCall(request);
         if (response.getResultCode() == ResultCode.Failed) {
             throw new TransactionException(TransactionExceptionCode.BeginFailed, response.getMsg());
@@ -78,6 +80,7 @@ public class DefaultTransactionManager implements TransactionManager {
         return response.getGlobalStatus();
     }
 
+    // 由TmRpcClient来发送
     private AbstractTransactionResponse syncCall(AbstractTransactionRequest request) throws TransactionException {
         try {
             return (AbstractTransactionResponse)TmRpcClient.getInstance().sendMsgWithResponse(request);

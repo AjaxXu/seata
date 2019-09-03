@@ -26,6 +26,7 @@ import io.seata.metrics.IdConstants;
 
 /**
  * Compact Summary implement with SummaryValue
+ * 压缩类型的汇总
  *
  * @author zhengyangyong
  */

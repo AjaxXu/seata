@@ -38,6 +38,7 @@ import io.seata.core.store.LogStore;
 
 /**
  * The type Log store data base dao.
+ * 基于数据库的日志存储
  *
  * @author zhangsen
  * @date 2019 /4/2
@@ -61,9 +62,9 @@ public class LogStoreDataBaseDAO implements LogStore, Initialize {
     protected String globalTable;
 
     /**
-     * The Brach table.
+     * The Branch table.
      */
-    protected String brachTable;
+    protected String branchTable;
 
     private String dbType;
 
@@ -86,7 +87,7 @@ public class LogStoreDataBaseDAO implements LogStore, Initialize {
     public void init() {
         globalTable = CONFIG.getConfig(ConfigurationKeys.STORE_DB_GLOBAL_TABLE,
             ConfigurationKeys.STORE_DB_GLOBAL_DEFAULT_TABLE);
-        brachTable = CONFIG.getConfig(ConfigurationKeys.STORE_DB_BRANCH_TABLE,
+        branchTable = CONFIG.getConfig(ConfigurationKeys.STORE_DB_BRANCH_TABLE,
             ConfigurationKeys.STORE_DB_BRANCH_DEFAULT_TABLE);
         dbType = CONFIG.getConfig(ConfigurationKeys.STORE_DB_TYPE);
         if (StringUtils.isBlank(dbType)) {
@@ -332,7 +333,7 @@ public class LogStoreDataBaseDAO implements LogStore, Initialize {
     @Override
     public List<BranchTransactionDO> queryBranchTransactionDO(String xid) {
         List<BranchTransactionDO> rets = new ArrayList<>();
-        String sql = LogStoreSqls.getQureyBranchTransaction(brachTable, dbType);
+        String sql = LogStoreSqls.getQureyBranchTransaction(branchTable, dbType);
         Connection conn = null;
         PreparedStatement ps = null;
         try {
@@ -367,7 +368,7 @@ public class LogStoreDataBaseDAO implements LogStore, Initialize {
 
     @Override
     public boolean insertBranchTransactionDO(BranchTransactionDO branchTransactionDO) {
-        String sql = LogStoreSqls.getInsertBranchTransactionSQL(brachTable, dbType);
+        String sql = LogStoreSqls.getInsertBranchTransactionSQL(branchTable, dbType);
         Connection conn = null;
         PreparedStatement ps = null;
         try {
@@ -405,7 +406,7 @@ public class LogStoreDataBaseDAO implements LogStore, Initialize {
 
     @Override
     public boolean updateBranchTransactionDO(BranchTransactionDO branchTransactionDO) {
-        String sql = LogStoreSqls.getUpdateBranchTransactionStatusSQL(brachTable, dbType);
+        String sql = LogStoreSqls.getUpdateBranchTransactionStatusSQL(branchTable, dbType);
         Connection conn = null;
         PreparedStatement ps = null;
         try {
@@ -436,7 +437,7 @@ public class LogStoreDataBaseDAO implements LogStore, Initialize {
 
     @Override
     public boolean deleteBranchTransactionDO(BranchTransactionDO branchTransactionDO) {
-        String sql = LogStoreSqls.getDeleteBranchTransactionByBranchIdSQL(brachTable, dbType);
+        String sql = LogStoreSqls.getDeleteBranchTransactionByBranchIdSQL(branchTable, dbType);
         Connection conn = null;
         PreparedStatement ps = null;
         try {
@@ -518,10 +519,10 @@ public class LogStoreDataBaseDAO implements LogStore, Initialize {
     /**
      * Sets brach table.
      *
-     * @param brachTable the brach table
+     * @param branchTable the brach table
      */
-    public void setBrachTable(String brachTable) {
-        this.brachTable = brachTable;
+    public void setBranchTable(String branchTable) {
+        this.branchTable = branchTable;
     }
 
     /**

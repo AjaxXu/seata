@@ -25,6 +25,7 @@ import io.seata.core.protocol.AbstractMessage;
 
 /**
  * The Seata codec.
+ * Seata编码器
  *
  * @author zhangsen
  * @data 2019 /5/6

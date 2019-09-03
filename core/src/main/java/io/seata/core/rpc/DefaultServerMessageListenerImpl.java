@@ -42,6 +42,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The type Default server message listener.
+ * 默认的服务端消息监听器
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /10/18
@@ -138,8 +139,7 @@ public class DefaultServerMessageListenerImpl implements ServerMessageListener {
             LOGGER.error(exx.getMessage());
         }
         //FIXME please add success or fail
-        sender.sendResponse(request, ctx.channel(),
-            new RegisterTMResponse(isSuccess));
+        sender.sendResponse(request, ctx.channel(), new RegisterTMResponse(isSuccess));
     }
 
     @Override
@@ -147,7 +147,7 @@ public class DefaultServerMessageListenerImpl implements ServerMessageListener {
         try {
             sender.sendResponse(request, ctx.channel(), HeartbeatMessage.PONG);
         } catch (Throwable throwable) {
-            LOGGER.error("", "send response error", throwable);
+            LOGGER.error("send response error", throwable);
         }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("received PING from " + ctx.channel().remoteAddress());

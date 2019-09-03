@@ -22,9 +22,10 @@ import java.util.List;
 
 /**
  * The type Abstract transaction store manager.
+ * 事务存储管理器的抽象类
  *
  * @author zhangsen
- * @data 2019 /4/25
+ * @date 2019 /4/25
  */
 public abstract class AbstractTransactionStoreManager implements TransactionStoreManager {
 

@@ -19,6 +19,7 @@ import io.seata.core.protocol.RpcMessage;
 
 /**
  * The interface Client message listener.
+ * 客户端消息监听器
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /10/10

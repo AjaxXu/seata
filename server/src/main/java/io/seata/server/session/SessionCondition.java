@@ -19,6 +19,7 @@ import io.seata.core.model.GlobalStatus;
 
 /**
  * The type Session condition.
+ * Session条件
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /12/13
@@ -28,7 +29,7 @@ public class SessionCondition {
     private String xid;
     private GlobalStatus status;
     private GlobalStatus[] statuses;
-    private long overTimeAliveMills;
+    private long overTimeAliveMills; // 存活时间
 
     /**
      * Instantiates a new Session condition.

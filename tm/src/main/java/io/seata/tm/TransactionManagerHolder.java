@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The type Default transaction manager.
+ * 获取默认的TM
  *
  * @author sharajava
  */
@@ -36,6 +37,7 @@ public class TransactionManagerHolder {
 
         static {
             try {
+                // 定义在MET-INF/services/io.seata.core.model.TransactionManager里
                 INSTANCE = EnhancedServiceLoader.load(TransactionManager.class);
                 LOGGER.info("TransactionManager Singleton " + INSTANCE);
             } catch (Throwable anyEx) {

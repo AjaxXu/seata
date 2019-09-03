@@ -17,6 +17,7 @@ package io.seata.core.protocol;
 
 /**
  * The type Abstract result message.
+ * 抽象结果信息
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /9/14

@@ -22,6 +22,7 @@ import io.seata.common.loader.LoadLevel;
 
 /**
  * The type Thread local context core.
+ * ThreadLocal 上下文
  *
  * @author jimin.jm @alibaba-inc.com
  */
@@ -31,7 +32,7 @@ public class ThreadLocalContextCore implements ContextCore {
     private ThreadLocal<Map<String, String>> threadLocal = new ThreadLocal<Map<String, String>>() {
         @Override
         protected Map<String, String> initialValue() {
-            return new HashMap<String, String>();
+            return new HashMap<>();
         }
 
     };

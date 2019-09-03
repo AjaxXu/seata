@@ -20,6 +20,7 @@ import io.seata.core.protocol.AbstractResultMessage;
 
 /**
  * To handle the received RPC message on upper level.
+ * 事务消息处理器，在上一层处理接收到的RPC消息
  *
  * @author jimin.jm @alibaba-inc.com
  */
@@ -27,6 +28,7 @@ public interface TransactionMessageHandler {
 
     /**
      * On a request received.
+     * 收到请求消息时调用
      *
      * @param request received request message
      * @param context context of the RPC
@@ -36,6 +38,7 @@ public interface TransactionMessageHandler {
 
     /**
      * On a response received.
+     * 收到响应结果时调用
      *
      * @param response received response message
      * @param context  context of the RPC

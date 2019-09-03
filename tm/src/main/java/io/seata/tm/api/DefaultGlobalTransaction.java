@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The type Default global transaction.
+ * 默认的全局事务
  *
  * @author sharajava
  */
@@ -79,6 +80,7 @@ public class DefaultGlobalTransaction implements GlobalTransaction {
     @Override
     public void begin(int timeout, String name) throws TransactionException {
         if (role != GlobalTransactionRole.Launcher) {
+            // 如果不是发起者，跳过begin; xid不能为null
             check();
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Ignore Begin(): just involved in global transaction [" + xid + "]");
@@ -93,6 +95,7 @@ public class DefaultGlobalTransaction implements GlobalTransaction {
         }
         xid = transactionManager.begin(null, null, name, timeout);
         status = GlobalStatus.Begin;
+        // 绑定事务id
         RootContext.bind(xid);
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("Begin new global transaction [" + xid + "]");
@@ -104,6 +107,7 @@ public class DefaultGlobalTransaction implements GlobalTransaction {
     public void commit() throws TransactionException {
         if (role == GlobalTransactionRole.Participant) {
             // Participant has no responsibility of committing
+            // 参与者直接忽略
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Ignore Commit(): just involved in global transaction [" + xid + "]");
             }
@@ -113,6 +117,7 @@ public class DefaultGlobalTransaction implements GlobalTransaction {
             throw new IllegalStateException();
         }
 
+        // 由 TM 向 TC 发出提交全局事务的请求
         status = transactionManager.commit(xid);
         if (RootContext.getXID() != null) {
             if (xid.equals(RootContext.getXID())) {
@@ -129,6 +134,7 @@ public class DefaultGlobalTransaction implements GlobalTransaction {
     public void rollback() throws TransactionException {
         if (role == GlobalTransactionRole.Participant) {
             // Participant has no responsibility of committing
+            // 参与者直接忽略
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Ignore Rollback(): just involved in global transaction [" + xid + "]");
             }

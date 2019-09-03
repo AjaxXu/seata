@@ -17,6 +17,7 @@ package io.seata.core.model;
 
 /**
  * The enum Branch type.
+ * 事务类型
  *
  * @author sharajava
  */

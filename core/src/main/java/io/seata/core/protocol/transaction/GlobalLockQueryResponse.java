@@ -20,6 +20,7 @@ import io.seata.core.protocol.MessageType;
 
 /**
  * The type Global lock query response.
+ * 全局锁请求响应结果
  *
  * @author jimin.jm @alibaba-inc.com
  */

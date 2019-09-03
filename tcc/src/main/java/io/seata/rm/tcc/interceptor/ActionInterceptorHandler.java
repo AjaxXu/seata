@@ -36,6 +36,7 @@ import java.util.Map;
 
 /**
  * Handler the TCC Participant Aspect : Setting Context, Creating Branch Record
+ * TCC参与者切面处理器
  *
  * @author zhangsen
  */
@@ -61,15 +62,17 @@ public class ActionInterceptorHandler {
         String actionName = businessAction.name();
         BusinessActionContext actionContext = new BusinessActionContext();
         actionContext.setXid(xid);
-        //set action anme
+        //set action name
         actionContext.setActionName(actionName);
         //TODO services
 
         //Creating Branch Record
+        // 创建分支事务
         String branchId = doTccActionLogStore(method, arguments, businessAction, actionContext);
         actionContext.setBranchId(branchId);
 
         //set the parameter whose type is BusinessActionContext
+        // 记录方法中BusinessActionContext参数的值
         Class<?>[] types = method.getParameterTypes();
         int argIndex = 0;
         for (Class<?> cls : types) {
@@ -88,6 +91,7 @@ public class ActionInterceptorHandler {
 
     /**
      * Creating Branch Record
+     * 创建分支记录
      *
      * @param method         the method
      * @param arguments      the arguments
@@ -104,19 +108,24 @@ public class ActionInterceptorHandler {
         context.put(Constants.ACTION_START_TIME, System.currentTimeMillis());
 
         //init business context
+        // 上下文中加入prepare\commit\rollback等方法名
         initBusinessContext(context, method, businessAction);
         //Init running environment context
+        // 初始化运行环境上下文
         initFrameworkContext(context);
         actionContext.setActionContext(context);
 
         //init applicationData
+        // 初始化应用数据
         Map<String, Object> applicationContext = new HashMap<String, Object>(4);
         applicationContext.put(Constants.TCC_ACTION_CONTEXT, context);
         String applicationContextStr = JSON.toJSONString(applicationContext);
         try {
             //registry branch record
+            // resourceManager 通过 RPC 向 TC 注册分支事务
             Long branchId = DefaultResourceManager.get().branchRegister(BranchType.TCC, actionName, null, xid,
                 applicationContextStr, null);
+            // 拿到 TC 返回的分支事务 ID
             return String.valueOf(branchId);
         } catch (Throwable t) {
             String msg = "TCC branch Register error, xid:" + xid;
@@ -140,6 +149,7 @@ public class ActionInterceptorHandler {
 
     /**
      * Init business context
+     * 初始化业务上下文
      *
      * @param context        the context
      * @param method         the method
@@ -149,6 +159,7 @@ public class ActionInterceptorHandler {
                                        TwoPhaseBusinessAction businessAction) {
         if (method != null) {
             //the phase one method name
+            // 第一阶段方法名
             context.put(Constants.PREPARE_METHOD, method.getName());
         }
         if (businessAction != null) {
@@ -161,6 +172,7 @@ public class ActionInterceptorHandler {
 
     /**
      * Extracting context data from parameters, add them to the context
+     * 抽取上下文数据
      *
      * @param method    the method
      * @param arguments the arguments

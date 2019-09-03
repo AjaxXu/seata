@@ -19,6 +19,7 @@ import io.seata.common.loader.EnhancedServiceLoader;
 
 /**
  * The type Load balance factory.
+ * Load balance工厂类
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2019 /02/12

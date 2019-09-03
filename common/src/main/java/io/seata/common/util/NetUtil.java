@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 
 /**
  * The type Net util.
+ * 网络辅助类
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /10/10

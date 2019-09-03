@@ -38,6 +38,7 @@ import java.util.function.Function;
 
 /**
  * The type Rpc client.
+ * Transaction Manager的rpc客户端
  *
  * @author jimin.jm @alibaba-inc.com
  * @author zhaojun
@@ -56,6 +57,7 @@ public final class TmRpcClient extends AbstractRpcRemotingClient {
     
     /**
      * The constant enableDegrade.
+     * 支持降级
      */
     public static boolean enableDegrade = false;
 
@@ -152,6 +154,7 @@ public final class TmRpcClient extends AbstractRpcRemotingClient {
     @Override
     public void onRegisterMsgSuccess(String serverAddress, Channel channel, Object response,
                                      AbstractMessage requestMessage) {
+        // tm注册成功，将channel注册到manager
         getClientChannelManager().registerChannel(serverAddress, channel);
     }
 

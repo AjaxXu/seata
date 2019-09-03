@@ -33,6 +33,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.EventExecutorGroup;
+import io.netty.util.concurrent.Future;
 import io.netty.util.internal.PlatformDependent;
 import io.seata.common.exception.FrameworkException;
 import io.seata.common.thread.NamedThreadFactory;
@@ -48,23 +49,26 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Rpc client.
+ * rpc客户端启动类
  *
  * @author jimin.jm @alibaba-inc.com
  * @author zhaojun
  */
 public class RpcClientBootstrap implements RemotingClient {
-    
+
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRpcRemotingClient.class);
     private final NettyClientConfig nettyClientConfig;
     private final Bootstrap bootstrap = new Bootstrap();
     private final EventLoopGroup eventLoopGroupWorker;
     private EventExecutorGroup defaultEventExecutorGroup;
+
+    // 客户端通道池
     private AbstractChannelPoolMap<InetSocketAddress, FixedChannelPool> clientChannelPool;
     private final AtomicBoolean initialized = new AtomicBoolean(false);
     private static final String THREAD_PREFIX_SPLIT_CHAR = "_";
     private final ChannelHandler channelHandler;
     private final NettyPoolKey.TransactionRole transactionRole;
-    
+
     public RpcClientBootstrap(NettyClientConfig nettyClientConfig, final EventExecutorGroup eventExecutorGroup,
                               ChannelHandler channelHandler, NettyPoolKey.TransactionRole transactionRole) {
         if (null == nettyClientConfig) {
@@ -82,7 +86,7 @@ public class RpcClientBootstrap implements RemotingClient {
         this.defaultEventExecutorGroup = eventExecutorGroup;
         this.channelHandler = channelHandler;
     }
-    
+
     @Override
     public void start() {
         if (this.defaultEventExecutorGroup == null) {
@@ -90,13 +94,14 @@ public class RpcClientBootstrap implements RemotingClient {
                 new NamedThreadFactory(getThreadPrefix(nettyClientConfig.getClientWorkerThreadPrefix()),
                     nettyClientConfig.getClientWorkerThreads()));
         }
-        this.bootstrap.group(this.eventLoopGroupWorker).channel(
-            nettyClientConfig.getClientChannelClazz()).option(
-            ChannelOption.TCP_NODELAY, true).option(ChannelOption.SO_KEEPALIVE, true).option(
-            ChannelOption.CONNECT_TIMEOUT_MILLIS, nettyClientConfig.getConnectTimeoutMillis()).option(
-            ChannelOption.SO_SNDBUF, nettyClientConfig.getClientSocketSndBufSize()).option(ChannelOption.SO_RCVBUF,
-            nettyClientConfig.getClientSocketRcvBufSize());
-    
+        this.bootstrap.group(this.eventLoopGroupWorker)
+                .channel(nettyClientConfig.getClientChannelClazz())
+                .option(ChannelOption.TCP_NODELAY, true)
+                .option(ChannelOption.SO_KEEPALIVE, true)
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, nettyClientConfig.getConnectTimeoutMillis())
+                .option(ChannelOption.SO_SNDBUF, nettyClientConfig.getClientSocketSndBufSize())
+                .option(ChannelOption.SO_RCVBUF, nettyClientConfig.getClientSocketRcvBufSize());
+
         if (nettyClientConfig.enableNative()) {
             if (PlatformDependent.isOsx()) {
                 if (LOGGER.isInfoEnabled()) {
@@ -137,7 +142,7 @@ public class RpcClientBootstrap implements RemotingClient {
         } else {
             bootstrap.handler(
                 new ChannelInitializer<SocketChannel>() {
-                
+
                     @Override
                     public void initChannel(SocketChannel ch) {
                         ChannelPipeline pipeline = ch.pipeline();
@@ -148,7 +153,7 @@ public class RpcClientBootstrap implements RemotingClient {
                                 .addLast(new ProtocolV1Decoder())
                                 .addLast(new ProtocolV1Encoder());
                         if (null != channelHandler) {
-                            ch.pipeline().addLast(channelHandler);
+                            pipeline.addLast(channelHandler);
                         }
                     }
                 });
@@ -157,7 +162,7 @@ public class RpcClientBootstrap implements RemotingClient {
             LOGGER.info("RpcClientBootstrap has started");
         }
     }
-    
+
     @Override
     public void shutdown() {
         try {
@@ -172,10 +177,10 @@ public class RpcClientBootstrap implements RemotingClient {
             LOGGER.error("Failed to shutdown: {}", exx.getMessage());
         }
     }
-    
+
     /**
      * Gets new channel.
-     *
+     * todo: use clientConnPool
      * @param address the address
      * @return the new channel
      */
@@ -196,7 +201,7 @@ public class RpcClientBootstrap implements RemotingClient {
         }
         return channel;
     }
-    
+
     /**
      * Gets thread prefix.
      *

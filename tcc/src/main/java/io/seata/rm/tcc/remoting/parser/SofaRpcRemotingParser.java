@@ -22,6 +22,7 @@ import io.seata.rm.tcc.remoting.RemotingDesc;
 
 /**
  * sofa-rpc remoting bean parsing
+ * sofa-rpc远程bean 解析
  *
  * @author zhangsen
  */

@@ -19,6 +19,7 @@ import java.io.Serializable;
 
 /**
  * The type Register rm response.
+ * 注册rm时的响应结果
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /10/10

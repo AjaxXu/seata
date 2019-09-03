@@ -19,6 +19,7 @@ import io.seata.core.model.BranchStatus;
 
 /**
  * The type Abstract branch end response.
+ * 分支端响应的抽象类
  *
  * @author sharajava
  */

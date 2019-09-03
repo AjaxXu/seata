@@ -24,6 +24,7 @@ import io.seata.core.protocol.RpcMessage;
 
 /**
  * The interface Server message sender.
+ * 服务器端消息发送者
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /10/15
@@ -75,7 +76,7 @@ public interface ServerMessageSender {
      * @throws IOException .
      * @throws TimeoutException the timeout exception
      */
-    Object sendASyncRequest(Channel channel, Object message) throws IOException, TimeoutException;
+    Object sendAsyncRequest(Channel channel, Object message) throws IOException, TimeoutException;
 
 
 }

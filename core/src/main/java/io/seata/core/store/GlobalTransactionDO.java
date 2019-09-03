@@ -22,6 +22,7 @@ import java.util.Date;
 
 /**
  * Global Transaction data object
+ * 全局事务数据对象
  *
  * @author zhangsen
  * @date 2019 /3/26

@@ -19,6 +19,7 @@ import java.util.List;
 
 /**
  * The type Local db locker.
+ * 本地的数据库locker，暂时不支持获取锁
  *
  * @author zhangsen
  * @date 2019 -05-15

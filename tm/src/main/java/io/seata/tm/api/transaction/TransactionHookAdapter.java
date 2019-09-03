@@ -16,6 +16,7 @@
 package io.seata.tm.api.transaction;
 
 /**
+ * 默认的事务Hook
  * @author guoyao
  * @date 2019/3/5
  */

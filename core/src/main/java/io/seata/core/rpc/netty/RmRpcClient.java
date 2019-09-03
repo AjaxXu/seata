@@ -43,6 +43,7 @@ import static io.seata.common.Constants.DBKEYS_SPLIT_CHAR;
 
 /**
  * The type Rm rpc client.
+ * RM rpc客户端
  *
  * @author jimin.jm @alibaba-inc.com
  * @author zhaojun
@@ -233,6 +234,7 @@ public final class RmRpcClient extends AbstractRpcRemotingClient {
                 if (LOGGER.isInfoEnabled()) {
                     LOGGER.info("register resource, resourceId:" + resourceId);
                 }
+                // 注册 resourceId，远端将其解析为一个 RpcContext 保存在内存中
                 sendRegisterMessage(serverAddress, rmChannel, resourceId);
             }
         }

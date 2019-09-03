@@ -23,6 +23,7 @@ import io.seata.common.Constants;
 
 /**
  * The type Business activity context.
+ * 业务活动上下文
  *
  * @author zhangsen
  */

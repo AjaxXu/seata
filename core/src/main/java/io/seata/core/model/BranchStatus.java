@@ -22,6 +22,7 @@ import io.seata.common.exception.ShouldNeverHappenException;
 
 /**
  * Status of branch transaction.
+ * 分支事务状态
  *
  * @author sharajava
  */
@@ -66,12 +67,14 @@ public enum BranchStatus {
     /**
      * The Phase two commit failed retryable.
      * description:Commit logic is failed but retryable.
+     * 第二阶段commit失败但可重试
      */
     PhaseTwo_CommitFailed_Retryable(6),
 
     /**
      * The Phase two commit failed unretryable.
      * description:Commit logic is failed and NOT retryable.
+     * 第二阶段commit失败但不能重试
      */
     PhaseTwo_CommitFailed_Unretryable(7),
 

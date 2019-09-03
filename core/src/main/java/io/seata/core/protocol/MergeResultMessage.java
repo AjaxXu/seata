@@ -18,6 +18,7 @@ package io.seata.core.protocol;
 
 /**
  * The type Merge result message.
+ * 合并发送返回的结果
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /10/10

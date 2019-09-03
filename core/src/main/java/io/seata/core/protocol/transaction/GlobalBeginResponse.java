@@ -19,6 +19,7 @@ import io.seata.core.protocol.MessageType;
 
 /**
  * The type Global begin response.
+ * 全局事务开始的响应结果
  *
  * @author jimin.jm @alibaba-inc.com
  */

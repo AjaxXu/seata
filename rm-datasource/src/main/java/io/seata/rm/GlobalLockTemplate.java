@@ -21,6 +21,7 @@ import io.seata.core.context.RootContext;
 
 /**
  * Template of executing business logic in a local transaction with Global lock.
+ * 在使用全局锁的本地事务下执行业务逻辑
  *
  * @param <T>
  * @author deyou

@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The type FileConfiguration.
+ * 文件配置
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /9/10
@@ -55,7 +56,7 @@ public class FileConfiguration extends AbstractConfiguration<ConfigChangeListene
 
     private static final int MAX_CONFIG_OPERATE_THREAD = 2;
 
-    private static final long LISTENER_CONFIG_INTERNAL = 1 * 1000;
+    private static final long LISTENER_CONFIG_INTERNAL = 1000;
 
     private static final String REGISTRY_TYPE = "file";
 
@@ -96,6 +97,7 @@ public class FileConfiguration extends AbstractConfiguration<ConfigChangeListene
         if ((value = getConfigFromSysPro(dataId)) != null) {
             return value;
         }
+        // 如果系统变量里没有，封装成runnable放到线程池中去获取
         ConfigFuture configFuture = new ConfigFuture(dataId, defaultValue, ConfigOperation.GET, timeoutMills);
         configOperateExecutor.submit(new ConfigOperateRunnable(configFuture));
         return (String)configFuture.get();
@@ -124,8 +126,7 @@ public class FileConfiguration extends AbstractConfiguration<ConfigChangeListene
 
     @Override
     public void addConfigListener(String dataId, ConfigChangeListener listener) {
-        configListenersMap.putIfAbsent(dataId, new ArrayList<ConfigChangeListener>());
-        configListenersMap.get(dataId).add(listener);
+        configListenersMap.computeIfAbsent(dataId, key -> new ArrayList<>()).add(listener);
         listenedConfigMap.putIfAbsent(dataId, getConfig(dataId));
         if (null != listener.getExecutor()) {
             ConfigChangeRunnable configChangeTask = new ConfigChangeRunnable(dataId, listener);
@@ -167,6 +168,7 @@ public class FileConfiguration extends AbstractConfiguration<ConfigChangeListene
 
     /**
      * The type Config operate runnable.
+     * 配置操作的线程
      */
     class ConfigOperateRunnable implements Runnable {
 
@@ -256,6 +258,7 @@ public class FileConfiguration extends AbstractConfiguration<ConfigChangeListene
                 try {
                     Map<String, List<ConfigChangeListener>> configListenerMap;
                     if (null != dataId && null != listener) {
+                        // 如果该runnable有指定的dataId和listener，则只是监听该dataId
                         configListenerMap = new ConcurrentHashMap<>(8);
                         configListenerMap.put(dataId, new ArrayList<>());
                         configListenerMap.get(dataId).add(listener);
@@ -264,13 +267,15 @@ public class FileConfiguration extends AbstractConfiguration<ConfigChangeListene
                     }
                     for (Map.Entry<String, List<ConfigChangeListener>> entry : configListenerMap.entrySet()) {
                         String configId = entry.getKey();
-                        String currentConfig = getConfig(configId);
+                        String currentConfig = getConfig(configId); // 对于文件来说，从文件中获取对应configId的配置
                         if (ObjectUtils.notEqual(currentConfig, listenedConfigMap.get(configId))) {
+                            // 当前文件中的配置和内存中的不一样，更新内存配置，同时通知给configId的监听器
                             listenedConfigMap.put(configId, currentConfig);
                             notifyAllListener(configId, configListenerMap.get(configId));
 
                         }
                     }
+                    // sleep 1s
                     Thread.sleep(LISTENER_CONFIG_INTERNAL);
                 } catch (Exception exx) {
                     LOGGER.error(exx.getMessage());
@@ -286,6 +291,7 @@ public class FileConfiguration extends AbstractConfiguration<ConfigChangeListene
             } else {
                 for (ConfigChangeListener configChangeListener : configChangeListeners) {
                     if (null == configChangeListener.getExecutor()) {
+                        // 如果getExecutor()不是null，则已经在executor中运行change listener监听
                         needNotifyListeners.add(configChangeListener);
                     }
                 }

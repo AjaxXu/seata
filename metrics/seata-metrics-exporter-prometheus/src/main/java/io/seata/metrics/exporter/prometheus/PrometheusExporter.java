@@ -32,6 +32,7 @@ import io.seata.metrics.registry.Registry;
 
 /**
  * Exporter for Prometheus
+ * Prometheus 指标输出
  *
  * @author zhengyangyong
  */

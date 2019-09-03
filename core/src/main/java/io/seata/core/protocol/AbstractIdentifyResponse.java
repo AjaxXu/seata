@@ -17,6 +17,7 @@ package io.seata.core.protocol;
 
 /**
  * The type Abstract identify response.
+ * 识别响应的抽象类
  *
  * @author sharajava
  */

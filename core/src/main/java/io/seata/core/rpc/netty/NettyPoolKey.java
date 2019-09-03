@@ -19,6 +19,7 @@ import io.seata.core.protocol.AbstractMessage;
 
 /**
  * The type Netty pool key.
+ * Netty 池键
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /11/29
@@ -128,15 +129,16 @@ public class NettyPoolKey {
 
     /**
      * The enum Client role.
+     * 客户端角色
      */
     public enum TransactionRole {
 
         /**
-         * tm
+         * tm Transaction Manager
          */
         TMROLE(1),
         /**
-         * rm
+         * rm Resource Manager
          */
         RMROLE(2),
         /**

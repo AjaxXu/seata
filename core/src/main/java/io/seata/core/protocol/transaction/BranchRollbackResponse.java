@@ -19,6 +19,7 @@ import io.seata.core.protocol.MessageType;
 
 /**
  * The type Branch rollback response.
+ * 分支回滚响应结果
  *
  * @author jimin.jm @alibaba-inc.com
  */

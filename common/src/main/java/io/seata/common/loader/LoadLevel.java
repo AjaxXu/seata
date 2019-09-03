@@ -23,6 +23,7 @@ import java.lang.annotation.Target;
 
 /**
  * The interface Load level.
+ * 加载等级
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /10/10

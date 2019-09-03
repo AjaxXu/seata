@@ -35,6 +35,7 @@ import java.util.function.Function;
 
 /**
  * Netty client pool manager.
+ * netty 客户端通道管理器
  *
  * @author jimin.jm @alibaba-inc.com
  * @author zhaojun
@@ -82,11 +83,13 @@ class NettyClientChannelManager {
     
     /**
      * Acquire netty client channel connected to remote server.
+     * 请求netty客户端通道连接到远程服务器
      *
      * @param serverAddress server address
      * @return netty channel
      */
     Channel acquireChannel(String serverAddress) {
+        // 先从缓存中获取
         Channel channelToServer = channels.get(serverAddress);
         if (channelToServer != null) {
             channelToServer = getExistAliveChannel(channelToServer, serverAddress);
@@ -105,6 +108,7 @@ class NettyClientChannelManager {
     
     /**
      * Release channel to pool if necessary.
+     * 将channel返回池中
      *
      * @param channel channel
      * @param serverAddress server address
@@ -114,7 +118,7 @@ class NettyClientChannelManager {
         try {
             synchronized (channelLocks.get(serverAddress)) {
                 Channel ch = channels.get(serverAddress);
-                if (null == ch) {
+                if (null == ch) {  // 缓存中不存在
                     nettyClientKeyPool.returnObject(poolKeyMap.get(serverAddress), channel);
                     return;
                 }
@@ -122,8 +126,10 @@ class NettyClientChannelManager {
                     if (LOGGER.isInfoEnabled()) {
                         LOGGER.info("return to pool, rm channel:" + channel);
                     }
+                    // 销毁通道
                     destroyChannel(serverAddress, channel);
                 } else {
+                    // 内存中存在的channel和传过来的channel不一致
                     nettyClientKeyPool.returnObject(poolKeyMap.get(serverAddress), channel);
                 }
             }
@@ -134,6 +140,7 @@ class NettyClientChannelManager {
     
     /**
      * Destroy channel.
+     * 从内存中删除，然后返还给池
      *
      * @param serverAddress server address
      * @param channel channel
@@ -152,6 +159,7 @@ class NettyClientChannelManager {
     
     /**
      * Reconnect to remote server of current transaction service group.
+     * 重连到远程服务器
      *
      * @param transactionServiceGroup transaction service group
      */
@@ -175,11 +183,13 @@ class NettyClientChannelManager {
             }
         }
     }
-    
+
+    // 使失效
     void invalidateObject(final String serverAddress, final Channel channel) throws Exception {
         nettyClientKeyPool.invalidateObject(poolKeyMap.get(serverAddress), channel);
     }
-    
+
+    // 注册channel
     void registerChannel(final String serverAddress, final Channel channel) {
         if (null != channels.get(serverAddress) && channels.get(serverAddress).isActive()) {
             return;
@@ -220,7 +230,8 @@ class NettyClientChannelManager {
         }
         return availList;
     }
-    
+
+    // 获得alive的channel
     private Channel getExistAliveChannel(Channel rmChannel, String serverAddress) {
         if (rmChannel.isActive()) {
             return rmChannel;

@@ -167,6 +167,7 @@ public class GlobalTransactionScanner extends AbstractAutoProxyCreator
                 "applicationId: " + applicationId + ", txServiceGroup: " + txServiceGroup);
         }
         //init TM
+        // 初始化TM
         TMClient.init(applicationId, txServiceGroup);
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info(
@@ -174,6 +175,7 @@ public class GlobalTransactionScanner extends AbstractAutoProxyCreator
                     + txServiceGroup + "]");
         }
         //init RM
+        // 初始化RM
         RMClient.init(applicationId, txServiceGroup);
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info(

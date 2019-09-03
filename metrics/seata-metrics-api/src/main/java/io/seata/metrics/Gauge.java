@@ -17,6 +17,7 @@ package io.seata.metrics;
 
 /**
  * Gauge interface for metrics
+ * 监控指标度量接口
  *
  * @author zhengyangyong
  */

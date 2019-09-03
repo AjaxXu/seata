@@ -33,6 +33,7 @@ import java.util.Map;
 
 /**
  * TCC Interceptor
+ * TCC切面
  *
  * @author zhangsen
  */
@@ -74,6 +75,7 @@ public class TccActionInterceptor implements MethodInterceptor {
         Method method = getActionInterfaceMethod(invocation);
         TwoPhaseBusinessAction businessAction = method.getAnnotation(TwoPhaseBusinessAction.class);
         //try method
+        // 如果是try方法
         if (businessAction != null) {
             //save the xid
             String xid = RootContext.getXID();
@@ -82,6 +84,7 @@ public class TccActionInterceptor implements MethodInterceptor {
             try {
                 Object[] methodArgs = invocation.getArguments();
                 //Handler the TCC Aspect
+                // 处理TCC 切面
                 Map<String, Object> ret = actionInterceptorHandler.proceed(method, methodArgs, xid, businessAction,
                         new Callback<Object>() {
                             @Override
@@ -131,6 +134,7 @@ public class TccActionInterceptor implements MethodInterceptor {
 
     /**
      * get the interface of proxy
+     * 获得代理接口
      *
      * @param proxyBean the proxy bean
      * @return proxy interface

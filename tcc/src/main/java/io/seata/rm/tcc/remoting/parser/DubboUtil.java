@@ -22,6 +22,7 @@ import io.seata.common.util.ReflectionUtil;
 
 /**
  * dubbo attribute analysis
+ * dubbo工具类
  *
  * @author zhangsen
  */

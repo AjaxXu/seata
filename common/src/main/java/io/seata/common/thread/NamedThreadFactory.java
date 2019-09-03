@@ -22,6 +22,7 @@ import io.netty.util.concurrent.FastThreadLocalThread;
 
 /**
  * The type Named thread factory.
+ * 指定名称的线程工厂
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /9/12

@@ -20,6 +20,7 @@ import io.seata.core.rpc.RpcContext;
 
 /**
  * The type Global status request.
+ * 全局事务状态查询请求
  *
  * @author jimin.jm @alibaba-inc.com
  */

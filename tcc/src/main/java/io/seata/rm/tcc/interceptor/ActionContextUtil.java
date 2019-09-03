@@ -29,6 +29,7 @@ import io.seata.rm.tcc.api.BusinessActionContextParameter;
 
 /**
  * Extracting TCC Context from Method
+ * 从方法中获取TCC上下文数据
  *
  * @author zhangsen
  */
@@ -36,6 +37,7 @@ public class ActionContextUtil {
 
     /**
      * Extracting context data from parameters
+     * 从参数中获取上下文数据
      *
      * @param targetParam the target param
      * @return map map

@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.LongAdder;
 
 /**
  * Record container for CompactTimer
+ * timer值
  *
  * @author zhengyangyong
  */

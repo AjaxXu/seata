@@ -20,6 +20,7 @@ import java.util.Map;
 
 /**
  * Status of global transaction.
+ * 全局事务的状态
  *
  * @author sharajava
  */
@@ -63,6 +64,7 @@ public enum GlobalStatus {
 
     /**
      * The Timeout rollbacking.
+     * 超时回滚
      */
     // Rollbacking since timeout
     TimeoutRollbacking(6),
@@ -76,6 +78,7 @@ public enum GlobalStatus {
     /**
      * All branches can be async committed. The committing is NOT done yet, but it can be seen as committed for TM/RM
      * client.
+     * 所有分支能异步提交
      */
     AsyncCommitting(8),
 

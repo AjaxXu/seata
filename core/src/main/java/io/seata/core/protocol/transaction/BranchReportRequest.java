@@ -22,6 +22,7 @@ import io.seata.core.protocol.MessageType;
 
 /**
  * The type Branch report request.
+ * 分支报告请求
  *
  * @author jimin.jm @alibaba-inc.com
  */

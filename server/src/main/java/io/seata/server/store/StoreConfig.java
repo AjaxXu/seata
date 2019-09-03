@@ -20,8 +20,8 @@ import io.seata.config.ConfigurationFactory;
 
 import static io.seata.core.constants.ConfigurationKeys.STORE_FILE_PREFIX;
 
-
 /**
+ * 存储配置
  * @author lizhao
  */
 public class StoreConfig {

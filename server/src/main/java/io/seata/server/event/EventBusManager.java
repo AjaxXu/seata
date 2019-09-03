@@ -20,6 +20,7 @@ import io.seata.core.event.GuavaEventBus;
 
 /**
  * Manager hold the singleton event bus instance.
+ * 事件总线管理器
  *
  * @author zhengyangyong
  */

@@ -20,6 +20,7 @@ import io.seata.core.rpc.RpcContext;
 
 /**
  * The type Global rollback request.
+ * 全局事务回滚请求
  *
  * @author jimin.jm @alibaba-inc.com
  */

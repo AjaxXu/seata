@@ -20,6 +20,7 @@ import io.seata.core.rpc.RpcContext;
 
 /**
  * The type Global begin request.
+ * 全局事务开始请求
  *
  * @author jimin.jm @alibaba-inc.com
  */
@@ -69,7 +70,6 @@ public class GlobalBeginRequest extends AbstractTransactionRequestToTC {
     public short getTypeCode() {
         return MessageType.TYPE_GLOBAL_BEGIN;
     }
-
 
     @Override
     public AbstractTransactionResponse handle(RpcContext rpcContext) {

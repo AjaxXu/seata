@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The type Default failure handler.
+ * 默认失败处理器
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2019 /1/8
@@ -68,6 +69,7 @@ public class DefaultFailureHandlerImpl implements FailureHandler {
         timer.newTimeout(new CheckTimerTask(tx, GlobalStatus.Rollbacked), SCHEDULE_INTERVAL_SECONDS, TimeUnit.SECONDS);
     }
 
+    // 检查全局事务状态是否达到required的定时任务
     protected class CheckTimerTask implements TimerTask {
 
         private final GlobalTransaction tx;
@@ -98,6 +100,7 @@ public class DefaultFailureHandlerImpl implements FailureHandler {
         }
     }
 
+    // 判断全局事务状态是否达到required
     private boolean shouldStop(final GlobalTransaction tx, GlobalStatus required) {
         try {
             GlobalStatus status = tx.getStatus();

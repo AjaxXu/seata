@@ -19,6 +19,7 @@ import io.seata.common.util.StringUtils;
 
 /**
  * database type
+ * 数据库类型
  *
  * @author zhangsen
  * @date 2019 /4/2

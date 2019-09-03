@@ -51,6 +51,7 @@ import static io.seata.common.exception.FrameworkErrorCode.NoAvailableService;
 
 /**
  * The type Rpc remoting client.
+ * 客户端Rpc 远程调用的抽象类
  *
  * @author jimin.jm @alibaba-inc.com
  * @author zhaojun
@@ -72,10 +73,10 @@ public abstract class AbstractRpcRemotingClient extends AbstractRpcRemoting
     private static final String MERGE_THREAD_PREFIX = "rpcMergeMessageSend";
     
     private final RpcClientBootstrap clientBootstrap;
-    private NettyClientChannelManager clientChannelManager;
+    private NettyClientChannelManager clientChannelManager; // netty 客户端通道管理器
     private ClientMessageListener clientMessageListener;
     private final NettyPoolKey.TransactionRole transactionRole;
-    private ExecutorService mergeSendExecutorService;
+    private ExecutorService mergeSendExecutorService; // 合并发送线程池
     
     public AbstractRpcRemotingClient(NettyClientConfig nettyClientConfig, EventExecutorGroup eventExecutorGroup,
                                      ThreadPoolExecutor messageExecutor, NettyPoolKey.TransactionRole transactionRole) {
@@ -107,6 +108,7 @@ public abstract class AbstractRpcRemotingClient extends AbstractRpcRemoting
     @Override
     public void init() {
         clientBootstrap.start();
+        // 每隔5s去重连服务器，针对端口的连接
         timerExecutor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
@@ -140,8 +142,9 @@ public abstract class AbstractRpcRemotingClient extends AbstractRpcRemoting
             }
             return;
         }
+        // 如果收到合并发送返回的结果
         if (rpcMessage.getBody() instanceof MergeResultMessage) {
-            MergeResultMessage results = (MergeResultMessage) rpcMessage.getBody();
+            MergeResultMessage results = (MergeResultMessage) rpcMessage.getBody(); // 返回的具体信息
             MergedWarpMessage mergeMessage = (MergedWarpMessage) mergeMsgMap.remove(rpcMessage.getId());
             for (int i = 0; i < mergeMessage.msgs.size(); i++) {
                 int msgId = mergeMessage.msgIds.get(i);
@@ -151,6 +154,7 @@ public abstract class AbstractRpcRemotingClient extends AbstractRpcRemoting
                         LOGGER.info("msg: {} is not found in futures.", msgId);
                     }
                 } else {
+                    // future complete
                     future.setResultMessage(results.getMsgs()[i]);
                 }
             }
@@ -161,6 +165,7 @@ public abstract class AbstractRpcRemotingClient extends AbstractRpcRemoting
     
     @Override
     public void dispatch(RpcMessage request, ChannelHandlerContext ctx) {
+        // 客户端收到不在futures中的request
         if (clientMessageListener != null) {
             String remoteAddress = NetUtil.toStringAddress(ctx.channel().remoteAddress());
             clientMessageListener.onMessage(request, remoteAddress, this);
@@ -201,6 +206,7 @@ public abstract class AbstractRpcRemotingClient extends AbstractRpcRemoting
                     if (LOGGER.isDebugEnabled()) {
                         LOGGER.debug("will send ping msg,channel" + ctx.channel());
                     }
+                    // 发送心跳信息
                     sendRequest(ctx.channel(), HeartbeatMessage.PING);
                 } catch (Throwable throwable) {
                     LOGGER.error("", "send request error", throwable);
@@ -224,13 +230,12 @@ public abstract class AbstractRpcRemotingClient extends AbstractRpcRemoting
     public Object sendMsgWithResponse(Object msg, long timeout) throws TimeoutException {
         String validAddress = loadBalance(getTransactionServiceGroup());
         Channel channel = clientChannelManager.acquireChannel(validAddress);
-        Object result = super.sendAsyncRequestWithResponse(validAddress, channel, msg, timeout);
-        return result;
+        return super.sendAsyncRequestWithResponse(validAddress, channel, msg, timeout);
     }
     
     @Override
     public Object sendMsgWithResponse(Object msg) throws TimeoutException {
-        return sendMsgWithResponse(msg, NettyClientConfig.getRpcRequestTimeout());
+        return sendMsgWithResponse(msg, NettyClientConfig.getRpcRequestTimeout()); // 默认30s
     }
     
     @Override
@@ -264,6 +269,7 @@ public abstract class AbstractRpcRemotingClient extends AbstractRpcRemoting
 
     @Override
     public void destroyChannel(String serverAddress, Channel channel) {
+        // 代理给clientChannelManager
         clientChannelManager.destroyChannel(serverAddress, channel);
     }
     
@@ -271,6 +277,7 @@ public abstract class AbstractRpcRemotingClient extends AbstractRpcRemoting
         InetSocketAddress address = null;
         try {
             List<InetSocketAddress> inetSocketAddressList = RegistryFactory.getInstance().lookup(transactionServiceGroup);
+            // 根据负载均衡选择一个地址
             address = LoadBalanceFactory.getInstance().select(inetSocketAddressList);
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage());
@@ -282,11 +289,13 @@ public abstract class AbstractRpcRemotingClient extends AbstractRpcRemoting
     }
     
     private String getThreadPrefix() {
+        // rpcMergeMessageSend_${role}
         return AbstractRpcRemotingClient.MERGE_THREAD_PREFIX + THREAD_PREFIX_SPLIT_CHAR + transactionRole.name();
     }
 
     /**
      * The type Merged send runnable.
+     * 合并发送的线程
      */
     private class MergedSendRunnable implements Runnable {
 
@@ -306,6 +315,7 @@ public abstract class AbstractRpcRemotingClient extends AbstractRpcRemoting
                         continue;
                     }
 
+                    // 每个address，合并发送
                     MergedWarpMessage mergeMessage = new MergedWarpMessage();
                     while (!basket.isEmpty()) {
                         RpcMessage msg = basket.poll();
@@ -330,13 +340,14 @@ public abstract class AbstractRpcRemotingClient extends AbstractRpcRemoting
                                 messageFuture.setResultMessage(null);
                             }
                         }
-                        LOGGER.error("", "client merge call failed", e);
+                        LOGGER.error("client merge call failed", e);
                     }
                 }
                 isSending = false;
             }
         }
 
+        // 打印合并的消息日志
         private void printMergeMessageLog(MergedWarpMessage mergeMessage) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("merge msg size:" + mergeMessage.msgIds.size());

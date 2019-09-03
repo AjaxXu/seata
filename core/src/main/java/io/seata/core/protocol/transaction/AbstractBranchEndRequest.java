@@ -19,6 +19,7 @@ import io.seata.core.model.BranchType;
 
 /**
  * The type Abstract branch end request.
+ * 分支端的请求抽象类
  *
  * @author sharajava
  */

@@ -19,6 +19,7 @@ import io.seata.common.exception.FrameworkException;
 
 /**
  * extract remoting bean info
+ * 抽取远程bean的信息
  *
  * @author zhangsen
  */

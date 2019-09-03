@@ -18,6 +18,7 @@ package io.seata.core.protocol;
 
 /**
  * The type Abstract identify request.
+ * 标识请求的抽象类
  *
  * @author sharajava
  */

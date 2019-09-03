@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * abstract ResourceManager
+ * 抽象的资源管理器
  *
  * @author zhangsen
  */
@@ -45,12 +46,13 @@ public abstract class AbstractResourceManager implements ResourceManager {
 
     /**
      * registry branch record
+     * 注册分支
      * @param branchType the branch type
      * @param resourceId the resource id
      * @param clientId   the client id
      * @param xid        the xid
      * @param lockKeys   the lock keys
-     * @return
+     * @return 分支ID
      * @throws TransactionException
      */
     @Override
@@ -91,6 +93,7 @@ public abstract class AbstractResourceManager implements ResourceManager {
             request.setXid(xid);
             request.setBranchId(branchId);
             request.setStatus(status);
+            request.setBranchType(branchType);
             request.setApplicationData(applicationData);
 
             BranchReportResponse response = (BranchReportResponse) RmRpcClient.getInstance().sendMsgWithResponse(request);
@@ -116,6 +119,7 @@ public abstract class AbstractResourceManager implements ResourceManager {
 
     @Override
     public void registerResource(Resource resource) {
+        // 拿到 RmRpcClient 实例，调用其 registerResource 方法
         RmRpcClient.getInstance().registerResource(resource.getResourceGroupId(), resource.getResourceId());
     }
 }

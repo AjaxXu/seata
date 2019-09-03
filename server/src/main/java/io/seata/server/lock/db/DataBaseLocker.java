@@ -29,6 +29,7 @@ import io.seata.core.store.StoreMode;
 
 /**
  * The type Data base locker.
+ * 基于数据库的locker
  *
  * @author zhangsen
  * @data 2019 -05-15
@@ -61,6 +62,7 @@ public class DataBaseLocker extends AbstractLocker {
             return true;
         }
         try {
+            // 代理给lockStore
             return lockStore.acquireLock(convertToLockDO(locks));
         } catch (Exception t) {
             LOGGER.error("AcquireLock error, locks:" + CollectionUtils.toString(locks), t);

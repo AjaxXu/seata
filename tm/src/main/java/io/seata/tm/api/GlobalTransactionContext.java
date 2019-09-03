@@ -21,6 +21,7 @@ import io.seata.core.model.GlobalStatus;
 
 /**
  * GlobalTransaction API
+ * 全局事务 API
  *
  * @author sharajava
  */
@@ -35,12 +36,12 @@ public class GlobalTransactionContext {
      * @return
      */
     private static GlobalTransaction createNew() {
-        GlobalTransaction tx = new DefaultGlobalTransaction();
-        return tx;
+        return new DefaultGlobalTransaction();
     }
 
     /**
      * Get GlobalTransaction instance bind on current thread.
+     * 绑定在当前线程的全局事务实例
      *
      * @return null if no transaction context there.
      */
@@ -59,7 +60,7 @@ public class GlobalTransactionContext {
      */
     public static GlobalTransaction getCurrentOrCreate() {
         GlobalTransaction tx = getCurrent();
-        if (tx == null) {
+        if (tx == null) { // 还没开启全局事务，新建一个
             return createNew();
         }
         return tx;

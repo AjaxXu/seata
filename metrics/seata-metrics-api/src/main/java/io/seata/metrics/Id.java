@@ -22,6 +22,7 @@ import java.util.UUID;
 
 /**
  * Meter id
+ * 指标ID
  *
  * @author zhengyangyong
  */

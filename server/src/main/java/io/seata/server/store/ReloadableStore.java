@@ -19,6 +19,7 @@ import java.util.List;
 
 /**
  * The interface Reloadable store.
+ * 重加载存储接口
  *
  * @author zhangsen
  * @data 2019 /4/24

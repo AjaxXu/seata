@@ -17,6 +17,7 @@ package io.seata.rm.tcc.remoting;
 
 /**
  * remoting protocols enum
+ * 远程协议
  *
  * @author zhangsen
  */

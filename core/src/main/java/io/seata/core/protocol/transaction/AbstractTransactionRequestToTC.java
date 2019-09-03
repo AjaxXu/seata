@@ -18,6 +18,7 @@ package io.seata.core.protocol.transaction;
 
 /**
  * The type Abstract transaction request to tc.
+ * 到事务协调器的抽象事务请求
  *
  * @author sharajava
  */
@@ -25,6 +26,7 @@ public abstract class AbstractTransactionRequestToTC extends AbstractTransaction
 
     /**
      * The Handler.
+     * 事务协调器进入的handler
      */
     protected TCInboundHandler handler;
 
