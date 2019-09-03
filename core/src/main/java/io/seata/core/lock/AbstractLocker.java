@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The type Abstract locker.
+ * 锁的抽象类
  *
  * @author zhangsen
  * @date 2019 -05-15

@@ -17,6 +17,7 @@ package io.seata.metrics;
 
 /**
  * Seata metrics constants for id
+ * 监控常量
  *
  * @author zhengyangyong
  */

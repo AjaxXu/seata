@@ -17,6 +17,7 @@ package io.seata.core.constants;
 
 /**
  * server table columns name.
+ * 表的列名
  *
  * @author zjinlei
  */

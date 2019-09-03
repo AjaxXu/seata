@@ -26,6 +26,7 @@ import io.seata.metrics.SystemClock;
 
 /**
  * Compact Gauge implement with Supplier
+ * 压缩类型的计量
  *
  * @author zhengyangyong
  */

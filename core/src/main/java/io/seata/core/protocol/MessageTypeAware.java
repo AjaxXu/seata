@@ -22,6 +22,7 @@ public interface MessageTypeAware {
 
     /**
      * return the message type
+     * 获取消息类型
      * @return
      */
     short getTypeCode();

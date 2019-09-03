@@ -96,7 +96,6 @@ public class LockManagerTest {
         branchSession.setLockKey("t:0");
         branchSession.setBranchType(BranchType.AT);
         branchSession.setApplicationData("{\"data\":\"test\"}");
-        branchSession.setBranchType(BranchType.AT);
         return Stream.of(
                 Arguments.of(branchSession));
     }
@@ -116,7 +115,6 @@ public class LockManagerTest {
         branchSession1.setLockKey("t:1,2");
         branchSession1.setBranchType(BranchType.AT);
         branchSession1.setApplicationData("{\"data\":\"test\"}");
-        branchSession1.setBranchType(BranchType.AT);
 
         BranchSession branchSession2 = new BranchSession();
         branchSession2.setTransactionId(UUIDGenerator.generateUUID());
@@ -127,7 +125,6 @@ public class LockManagerTest {
         branchSession2.setLockKey("t:1,2");
         branchSession2.setBranchType(BranchType.AT);
         branchSession2.setApplicationData("{\"data\":\"test\"}");
-        branchSession2.setBranchType(BranchType.AT);
         return Stream.of(
                 Arguments.of(branchSession1, branchSession2));
     }

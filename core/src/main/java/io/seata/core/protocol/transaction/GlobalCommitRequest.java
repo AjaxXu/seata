@@ -20,6 +20,7 @@ import io.seata.core.rpc.RpcContext;
 
 /**
  * The type Global commit request.
+ * 全局事务提交请求
  *
  * @author jimin.jm @alibaba-inc.com
  */

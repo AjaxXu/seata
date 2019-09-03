@@ -17,6 +17,7 @@ package io.seata.core.store;
 
 /**
  * transaction log store mode
+ * 事务日志存储模式
  *
  * @author zhangsen
  * @date 2019 /4/2

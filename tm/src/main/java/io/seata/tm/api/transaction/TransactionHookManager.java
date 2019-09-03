@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * 事务Hook管理器
  * @author guoyao
  * @date 2019/3/4
  */
@@ -44,6 +45,7 @@ public final class TransactionHookManager {
 
     /**
      * add new hook
+     * 添加新的hook
      *
      * @param transactionHook
      */

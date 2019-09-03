@@ -28,15 +28,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.SocketAddress;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
  * The type channel manager.
+ * 通道管理者
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /12/07
@@ -45,21 +43,19 @@ public class ChannelManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ChannelManager.class);
     private static final ConcurrentMap<Channel, RpcContext> IDENTIFIED_CHANNELS
-        = new ConcurrentHashMap<Channel, RpcContext>();
+        = new ConcurrentHashMap<>();
 
     /**
      * resourceId -> applicationId -> ip -> port -> RpcContext
      */
     private static final ConcurrentMap<String, ConcurrentMap<String, ConcurrentMap<String, ConcurrentMap<Integer,
-        RpcContext>>>>
-        RM_CHANNELS = new ConcurrentHashMap<String, ConcurrentMap<String, ConcurrentMap<String, ConcurrentMap<Integer,
-        RpcContext>>>>();
+        RpcContext>>>> RM_CHANNELS = new ConcurrentHashMap<>();
 
     /**
      * ip+appname,port
      */
     private static final ConcurrentMap<String, ConcurrentMap<Integer, RpcContext>> TM_CHANNELS
-        = new ConcurrentHashMap<String, ConcurrentMap<Integer, RpcContext>>();
+        = new ConcurrentHashMap<>();
 
     /**
      * Is registered boolean.
@@ -117,6 +113,7 @@ public class ChannelManager {
 
     /**
      * Register tm channel.
+     * 注册Transaction Manager端的通道
      *
      * @param request the request
      * @param channel the channel
@@ -130,15 +127,16 @@ public class ChannelManager {
             request.getTransactionServiceGroup(),
             null, channel);
         rpcContext.holdInIdentifiedChannels(IDENTIFIED_CHANNELS);
+        // 客户端标志
         String clientIdentified = rpcContext.getApplicationId() + Constants.CLIENT_ID_SPLIT_CHAR
             + getClientIpFromChannel(channel);
-        TM_CHANNELS.putIfAbsent(clientIdentified, new ConcurrentHashMap<Integer, RpcContext>());
-        ConcurrentMap<Integer, RpcContext> clientIdentifiedMap = TM_CHANNELS.get(clientIdentified);
+        ConcurrentMap<Integer, RpcContext> clientIdentifiedMap = TM_CHANNELS.computeIfAbsent(clientIdentified, k -> new ConcurrentHashMap<>());
         rpcContext.holdInClientChannels(clientIdentifiedMap);
     }
 
     /**
      * Register rm channel.
+     * 注册Resource Manager(RM)端的通道
      *
      * @param resourceManagerRequest the resource manager request
      * @param channel                the channel
@@ -229,11 +227,7 @@ public class ChannelManager {
         if (StringUtils.isNullOrEmpty(dbkey)) {
             return null;
         }
-        Set<String> set = new HashSet<String>();
-        for (String s : dbkey.split(Constants.DBKEYS_SPLIT_CHAR)) {
-            set.add(s);
-        }
-        return set;
+        return new HashSet<>(Arrays.asList(dbkey.split(Constants.DBKEYS_SPLIT_CHAR)));
     }
 
     /**
@@ -292,7 +286,7 @@ public class ChannelManager {
     private static Channel getChannelFromSameClientMap(Map<Integer, RpcContext> clientChannelMap, int exclusivePort) {
         if (null != clientChannelMap && !clientChannelMap.isEmpty()) {
             for (ConcurrentMap.Entry<Integer, RpcContext> entry : clientChannelMap.entrySet()) {
-                if (entry.getKey().intValue() == exclusivePort) {
+                if (entry.getKey() == exclusivePort) {
                     clientChannelMap.remove(entry.getKey());
                     continue;
                 }
@@ -368,9 +362,7 @@ public class ChannelManager {
                         if (channel.isActive()) {
                             resultChannel = channel;
                             if (LOGGER.isInfoEnabled()) {
-                                LOGGER.info(
-                                    "Choose " + channel + " on the same IP[" + targetIP + "]  as alternative of "
-                                        + clientId);
+                                LOGGER.info("Choose " + channel + " on the same IP[" + targetIP + "]  as alternative of " + clientId);
                             }
                             break;
                         } else {
@@ -387,8 +379,7 @@ public class ChannelManager {
 
             // No channel on the this app node, try another one.
             if (resultChannel == null) {
-                for (ConcurrentMap.Entry<String, ConcurrentMap<Integer, RpcContext>> ipMapEntry : ipMap
-                    .entrySet()) {
+                for (ConcurrentMap.Entry<String, ConcurrentMap<Integer, RpcContext>> ipMapEntry : ipMap.entrySet()) {
                     if (ipMapEntry.getKey().equals(targetIP)) { continue; }
 
                     ConcurrentMap<Integer, RpcContext> portMapOnOtherIP = ipMapEntry.getValue();
@@ -494,7 +485,7 @@ public class ChannelManager {
         if (RM_CHANNELS.isEmpty()) {
             return null;
         }
-        Map<String,Channel> channels = new HashMap(RM_CHANNELS.size());
+        Map<String,Channel> channels = new HashMap<>(RM_CHANNELS.size());
         for (String resourceId : RM_CHANNELS.keySet()) {
             Channel channel = tryOtherApp(RM_CHANNELS.get(resourceId), null);
             if (channel == null) {

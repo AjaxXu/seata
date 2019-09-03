@@ -19,6 +19,7 @@ import io.seata.core.rpc.RpcContext;
 
 /**
  * The interface Tc inbound handler.
+ * 事务协调器 inbound 处理器
  *
  * @author sharajava
  */

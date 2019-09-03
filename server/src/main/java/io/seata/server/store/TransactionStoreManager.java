@@ -22,6 +22,7 @@ import java.util.List;
 
 /**
  * The interface Transaction store manager.
+ * 事务存储管理器
  *
  * @author jimin.jm @alibaba-inc.com
  */

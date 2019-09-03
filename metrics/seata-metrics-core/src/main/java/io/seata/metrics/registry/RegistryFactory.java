@@ -25,6 +25,7 @@ import io.seata.core.constants.ConfigurationKeys;
 
 /**
  * Registry Factory for load configured metrics registry
+ * 登记工厂类
  *
  * @author zhengyangyong
  */

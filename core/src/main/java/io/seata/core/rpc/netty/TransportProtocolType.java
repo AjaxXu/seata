@@ -17,6 +17,7 @@ package io.seata.core.rpc.netty;
 
 /**
  * The enum Transport protocol type.
+ * 传输层协议类型
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /9/10

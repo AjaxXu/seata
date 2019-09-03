@@ -21,6 +21,7 @@ import io.seata.core.codec.CompressorType;
 import io.seata.core.constants.ConfigurationKeys;
 
 /**
+ * 协议常量
  * @author Geng Zhang
  * @since 0.7.0
  */
@@ -72,6 +73,7 @@ public class ProtocolConstants {
 
     /**
      * Configured codec by user, default is SEATA
+     * 编码类型
      * 
      * @see CodecType#SEATA
      */
@@ -80,6 +82,7 @@ public class ProtocolConstants {
 
     /**
      * Configured compressor by user, default is NONE
+     * 压缩类型
      *
      * @see CompressorType#NONE
      */

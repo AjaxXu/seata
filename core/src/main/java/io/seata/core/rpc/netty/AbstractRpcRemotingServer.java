@@ -44,6 +44,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * The type Rpc remoting server.
+ * 远程服务器的抽象类
  *
  * @author jimin.jm @alibaba-inc.com
  * @author xingfudeshi@gmail.com

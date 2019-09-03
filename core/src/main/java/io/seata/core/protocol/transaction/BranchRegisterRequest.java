@@ -21,6 +21,7 @@ import io.seata.core.rpc.RpcContext;
 
 /**
  * The type Branch register request.
+ * 分支注册请求
  *
  * @author sharajava
  */

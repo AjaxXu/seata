@@ -21,6 +21,7 @@ import io.seata.core.exception.TransactionException;
  * Resource Manager.
  *
  * Control a branch transaction commit or rollback.
+ * 控制分支事务commit或者rollback.
  *
  * @author sharajava
  */

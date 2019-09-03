@@ -54,6 +54,7 @@ import java.util.concurrent.TimeoutException;
 
 /**
  * The type Abstract rpc remoting.
+ * Rpc 远程调用的抽象类
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /9/12
@@ -76,6 +77,7 @@ public abstract class AbstractRpcRemoting extends ChannelDuplexHandler implement
 
     /**
      * The Futures.
+     * RPCMessage.id -> MessageFuture
      */
     protected final ConcurrentHashMap<Integer, MessageFuture> futures = new ConcurrentHashMap<>();
     /**
@@ -130,6 +132,7 @@ public abstract class AbstractRpcRemoting extends ChannelDuplexHandler implement
      * Init.
      */
     public void init() {
+        // 定时检查超时的MessageFuture
         timerExecutor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
@@ -173,6 +176,7 @@ public abstract class AbstractRpcRemoting extends ChannelDuplexHandler implement
 
     /**
      * Send async request with response object.
+     * 异步发送请求，并返回结果
      *
      * @param channel the channel
      * @param msg     the msg
@@ -233,12 +237,8 @@ public abstract class AbstractRpcRemoting extends ChannelDuplexHandler implement
         futures.put(rpcMessage.getId(), messageFuture);
 
         if (address != null) {
-            ConcurrentHashMap<String, BlockingQueue<RpcMessage>> map = basketMap;
-            BlockingQueue<RpcMessage> basket = map.get(address);
-            if (basket == null) {
-                map.putIfAbsent(address, new LinkedBlockingQueue<>());
-                basket = map.get(address);
-            }
+            BlockingQueue<RpcMessage> basket = basketMap.computeIfAbsent(address, k -> new LinkedBlockingQueue<>());
+
             basket.offer(rpcMessage);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("offer message: " + rpcMessage.getBody());
@@ -249,23 +249,24 @@ public abstract class AbstractRpcRemoting extends ChannelDuplexHandler implement
                 }
             }
         } else {
-            ChannelFuture future;
-            channelWriteableCheck(channel, msg);
-            future = channel.writeAndFlush(rpcMessage);
+            channelWriteableCheck(channel, msg); // 检测channel变为writeable
+            ChannelFuture future = channel.writeAndFlush(rpcMessage);
             future.addListener(new ChannelFutureListener() {
                 @Override
                 public void operationComplete(ChannelFuture future) {
                     if (!future.isSuccess()) {
+                        // 如果future完成，但不成功，则提示等待的future完成。内容为异常信息
                         MessageFuture messageFuture = futures.remove(rpcMessage.getId());
                         if (messageFuture != null) {
                             messageFuture.setResultMessage(future.cause());
                         }
+                        // 销毁线程
                         destroyChannel(future.channel());
                     }
                 }
             });
         }
-        if (timeout > 0) {
+        if (timeout > 0) { // timeout > 0, 代表需要返回结果
             try {
                 return messageFuture.get(timeout, TimeUnit.MILLISECONDS);
             } catch (Exception exx) {
@@ -283,6 +284,7 @@ public abstract class AbstractRpcRemoting extends ChannelDuplexHandler implement
 
     /**
      * Send request.
+     * 发送请求，不要求返回结果
      *
      * @param channel the channel
      * @param msg     the msg
@@ -309,6 +311,7 @@ public abstract class AbstractRpcRemoting extends ChannelDuplexHandler implement
 
     /**
      * Send response.
+     * 同步发送结果
      *
      * @param request  the msg id
      * @param channel the channel
@@ -330,18 +333,24 @@ public abstract class AbstractRpcRemoting extends ChannelDuplexHandler implement
         channel.writeAndFlush(rpcMessage);
     }
 
+    /**
+     * 检测通道是否可写
+     * @param channel 通道
+     * @param msg 发送的信息
+     */
     private void channelWriteableCheck(Channel channel, Object msg) {
         int tryTimes = 0;
         synchronized (lock) {
             while (!channel.isWritable()) {
                 try {
+                    // 判断不可写的重试次数是否大于配置的最大次数，大于则销毁channel，并抛出异常
                     tryTimes++;
                     if (tryTimes > NettyClientConfig.getMaxNotWriteableRetry()) {
                         destroyChannel(channel);
                         throw new FrameworkException("msg:" + ((msg == null) ? "null" : msg.toString()),
                             FrameworkErrorCode.ChannelIsNotWritable);
                     }
-                    lock.wait(NOT_WRITEABLE_CHECK_MILLS);
+                    lock.wait(NOT_WRITEABLE_CHECK_MILLS); // 等待10ms，所以按配置的重试2000次，一共等待20s
                 } catch (InterruptedException exx) {
                     LOGGER.error(exx.getMessage());
                 }
@@ -368,6 +377,7 @@ public abstract class AbstractRpcRemoting extends ChannelDuplexHandler implement
                         @Override
                         public void run() {
                             try {
+                                // 分发消息
                                 dispatch(rpcMessage, ctx);
                             } catch (Throwable th) {
                                 LOGGER.error(FrameworkErrorCode.NetDispatch.getErrCode(), th.getMessage(), th);
@@ -382,7 +392,7 @@ public abstract class AbstractRpcRemoting extends ChannelDuplexHandler implement
                         String pid = name.split("@")[0];
                         int idx = new Random().nextInt(100);
                         try {
-                            Runtime.getRuntime().exec("jstack " + pid + " >d:/" + idx + ".log");
+                            Runtime.getRuntime().exec("jstack " + pid + " > " + idx + ".log");
                         } catch (IOException exx) {
                             LOGGER.error(exx.getMessage());
                         }
@@ -390,6 +400,7 @@ public abstract class AbstractRpcRemoting extends ChannelDuplexHandler implement
                     }
                 }
             } else {
+                // response
                 MessageFuture messageFuture = futures.remove(rpcMessage.getId());
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug(String
@@ -488,6 +499,7 @@ public abstract class AbstractRpcRemoting extends ChannelDuplexHandler implement
 
     /**
      * Destroy channel.
+     * 销毁channel
      *
      * @param channel the channel
      */

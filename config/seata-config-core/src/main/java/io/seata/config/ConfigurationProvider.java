@@ -17,6 +17,7 @@ package io.seata.config;
 
 /**
  * the interface configuration provider
+ * 配置提供者
  * @author xingfudeshi@gmail.com
  * @date 2019/04/12
  */

@@ -17,6 +17,7 @@ package io.seata.tm.api;
 
 /**
  * Callback on failure.
+ * 失败时的回调函数
  *
  * @author jimin.jm @alibaba-inc.com
  */

@@ -17,6 +17,7 @@ package io.seata.core.context;
 
 /**
  * The interface Context core.
+ * 上下文接口
  *
  * @author sharajava
  */

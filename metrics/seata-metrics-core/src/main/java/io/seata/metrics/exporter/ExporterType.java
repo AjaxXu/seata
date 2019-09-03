@@ -19,6 +19,7 @@ import io.seata.common.exception.NotSupportYetException;
 
 /**
  * Supported metrics exporter type
+ * 指标输出类型
  *
  * @author zhengyangyong
  */

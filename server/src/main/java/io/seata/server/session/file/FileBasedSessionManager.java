@@ -42,6 +42,7 @@ import io.seata.server.store.TransactionWriteStore;
 
 /**
  * The type File based session manager.
+ * 基于文件的Session管理器
  *
  * @author jimin.jm @alibaba-inc.com
  */
@@ -71,6 +72,7 @@ public class FileBasedSessionManager extends DefaultSessionManager implements Re
         washSessions();
     }
 
+    // 恢复session
     private void restoreSessions() {
         Map<Long, BranchSession> unhandledBranchBuffer = new HashMap<>();
 
@@ -126,6 +128,7 @@ public class FileBasedSessionManager extends DefaultSessionManager implements Re
         }
     }
 
+    // 从file中恢复session
     private void restoreSessions(boolean isHistory, Map<Long, BranchSession> unhandledBranchBuffer) {
         if (!(transactionStoreManager instanceof ReloadableStore)) {
             return;
@@ -245,7 +248,7 @@ public class FileBasedSessionManager extends DefaultSessionManager implements Re
             currentId = ((BranchSession)sessionStorable).getBranchId();
         }
 
-        return maxRecoverId > currentId ? maxRecoverId : currentId;
+        return Math.max(maxRecoverId, currentId);
     }
 
     private void setMaxId(long maxRecoverId) {

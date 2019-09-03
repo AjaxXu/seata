@@ -21,6 +21,7 @@ import io.seata.metrics.registry.Registry;
 
 /**
  * Exporter interface for metrics
+ * 指标输出接口
  *
  * @author zhengyangyong
  */

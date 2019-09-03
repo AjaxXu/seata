@@ -17,6 +17,7 @@ package io.seata.core.protocol.transaction;
 
 /**
  * The type Abstract global end request.
+ * 全局事务最终请求的抽象类
  *
  * @author sharajava
  */

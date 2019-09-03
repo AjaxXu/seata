@@ -22,6 +22,7 @@ import io.seata.common.loader.EnhancedServiceLoader;
 
 /**
  * The type Codec factory.
+ * 编码器工厂
  *
  * @author zhangsen
  * @date 2019 /5/6

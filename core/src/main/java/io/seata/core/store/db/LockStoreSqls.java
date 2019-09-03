@@ -21,6 +21,7 @@ import io.seata.core.constants.ServerTableColumnsName;
 
 /**
  * The type Lock store sqls.
+ * 锁存储SQL语句
  *
  * @author zhangsen
  * @date 2019 /4/26

@@ -144,6 +144,7 @@ public class EnhancedServiceLoader {
 
     /**
      * get all implements
+     * 获得所有实现
      *
      * @param <S>     the type parameter
      * @param service the service
@@ -167,6 +168,7 @@ public class EnhancedServiceLoader {
 
     /**
      * Get all the extension classes, follow {@linkplain LoadLevel} defined and sort order
+     * 获得service所有扩展类，根据{@linkplain LoadLevel}排序
      *
      * @param <S>     the type parameter
      * @param service the service
@@ -253,6 +255,7 @@ public class EnhancedServiceLoader {
     private static <S> List<Class> findAllExtensionClass(Class<S> service, String activateName, ClassLoader loader) {
         List<Class> extensions = new ArrayList<Class>();
         try {
+            // 加载 META-INF/services中对应service接口的文件内容到extensions
             loadFile(service, SERVICES_DIRECTORY, loader, extensions);
             loadFile(service, SEATA_DIRECTORY, loader, extensions);
         } catch (IOException e) {
@@ -262,27 +265,21 @@ public class EnhancedServiceLoader {
         if (extensions.isEmpty()) {
             return extensions;
         }
-        Collections.sort(extensions, new Comparator<Class>() {
-            @Override
-            public int compare(Class c1, Class c2) {
-                Integer o1 = 0;
-                Integer o2 = 0;
-                @SuppressWarnings("unchecked")
-                LoadLevel a1 = (LoadLevel)c1.getAnnotation(LoadLevel.class);
-                @SuppressWarnings("unchecked")
-                LoadLevel a2 = (LoadLevel)c2.getAnnotation(LoadLevel.class);
+        extensions.sort((Class c1, Class c2) -> {
+            int o1 = 0;
+            int o2 = 0;
+            LoadLevel a1 = (LoadLevel) c1.getAnnotation(LoadLevel.class);
+            LoadLevel a2 = (LoadLevel) c2.getAnnotation(LoadLevel.class);
 
-                if (a1 != null) {
-                    o1 = a1.order();
-                }
-
-                if (a2 != null) {
-                    o2 = a2.order();
-                }
-
-                return o1.compareTo(o2);
-
+            if (a1 != null) {
+                o1 = a1.order();
             }
+
+            if (a2 != null) {
+                o2 = a2.order();
+            }
+
+            return Integer.compare(o1, o2);
         });
 
         return extensions;
@@ -336,6 +333,7 @@ public class EnhancedServiceLoader {
 
     /**
      * init instance
+     * 初始化类
      *
      * @param <S>       the type parameter
      * @param service   the service

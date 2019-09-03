@@ -27,6 +27,7 @@ import io.seata.metrics.IdConstants;
 
 /**
  * Compact Timer implement with TimerValue
+ * 压缩的timer
  *
  * @author zhengyangyong
  */

@@ -21,6 +21,7 @@ import java.util.concurrent.TimeoutException;
 
 /**
  * The interface Client message sender.
+ * 客户端信息发送者接口
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /10/10
@@ -58,6 +59,7 @@ public interface ClientMessageSender {
 
     /**
      * Send response.
+     * 发送响应结果
      *
      * @param request       the msg id
      * @param serverAddress the server address

@@ -19,6 +19,7 @@ import java.io.Serializable;
 
 /**
  * The type Register rm request.
+ * 注册rm请求
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /10/10

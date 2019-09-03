@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Default clock implement use system
+ * 时间计量
  *
  * @author zhengyangyong
  */

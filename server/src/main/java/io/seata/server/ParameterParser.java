@@ -24,6 +24,7 @@ import io.seata.core.constants.ConfigurationKeys;
 
 /**
  * The type parameter parser
+ * 参数解析器
  *
  * @author xingfudeshi@gmail.com
  * @date 2019/05/30

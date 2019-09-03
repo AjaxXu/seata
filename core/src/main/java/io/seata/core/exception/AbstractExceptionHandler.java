@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The type Abstract exception handler.
+ * 异常处理器的抽象类
  *
  * @author sharajava
  */

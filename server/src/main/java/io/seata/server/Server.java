@@ -32,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * The type Server.
+ * 服务器
  *
  * @author jimin.jm @alibaba-inc.com
  */
@@ -54,9 +55,11 @@ public class Server {
      */
     public static void main(String[] args) throws IOException {
         //initialize the metrics
+        // 初始化指标
         MetricsManager.get().init();
 
         //initialize the parameter parser
+        // 初始化参数解析器
         ParameterParser parameterParser = new ParameterParser(args);
 
         System.setProperty(ConfigurationKeys.STORE_MODE, parameterParser.getStoreMode());
@@ -66,6 +69,8 @@ public class Server {
         rpcServer.setHost(parameterParser.getHost());
         //server port
         rpcServer.setListenPort(parameterParser.getPort());
+
+        // 初始化UUIDGenerator
         UUIDGenerator.init(parameterParser.getServerNode());
         //log store mode : file、db
         SessionHolder.init(parameterParser.getStoreMode());
@@ -74,6 +79,7 @@ public class Server {
         coordinator.init();
         rpcServer.setHandler(coordinator);
         // register ShutdownHook
+        // 注册关闭Hook
         ShutdownHook.getInstance().addDisposable(coordinator);
 
         //127.0.0.1 and 0.0.0.0 are not valid here.

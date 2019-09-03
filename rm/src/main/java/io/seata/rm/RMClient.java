@@ -20,6 +20,7 @@ import io.seata.core.rpc.netty.RmRpcClient;
 
 /**
  * The Rm client Initiator.
+ * RM客户端
  *
  * @author jimin.jm @alibaba-inc.com
  */

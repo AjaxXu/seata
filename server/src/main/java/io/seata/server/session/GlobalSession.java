@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The type Global session.
+ * 全局事务
  *
  * @author sharajava
  */
@@ -45,7 +46,7 @@ public class GlobalSession implements SessionLifecycle, SessionStorable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GlobalSession.class);
 
-    private static final int MAX_GLOBAL_SESSION_SIZE = StoreConfig.getMaxGlobalSessionSize();
+    private static final int MAX_GLOBAL_SESSION_SIZE = StoreConfig.getMaxGlobalSessionSize(); // 512b
 
     private static ThreadLocal<ByteBuffer> byteBufferThreadLocal = ThreadLocal.withInitial(() -> ByteBuffer.allocate(
         MAX_GLOBAL_SESSION_SIZE));
@@ -103,6 +104,7 @@ public class GlobalSession implements SessionLifecycle, SessionStorable {
      */
     public boolean canBeCommittedAsync() {
         for (BranchSession branchSession : branchSessions) {
+            // TCC 模式不能异步commit
             if (branchSession.getBranchType() == BranchType.TCC) {
                 return false;
             }
@@ -174,9 +176,9 @@ public class GlobalSession implements SessionLifecycle, SessionStorable {
 
     public void clean() throws TransactionException {
         for (BranchSession branchSession : branchSessions) {
+            // 分支事务解锁
             branchSession.unlock();
         }
-
     }
 
     /**
@@ -239,10 +241,8 @@ public class GlobalSession implements SessionLifecycle, SessionStorable {
                     return branchSession;
                 }
             }
-
             return null;
         }
-
     }
 
     /**
@@ -276,18 +276,18 @@ public class GlobalSession implements SessionLifecycle, SessionStorable {
      *
      * @param applicationId           the application id
      * @param transactionServiceGroup the transaction service group
-     * @param transactionName         the transaction name
-     * @param timeout                 the timeout
+     * @param transactionName         the transaction name 事务名称
+     * @param timeout                 the timeout 事务超时时间
      */
     public GlobalSession(String applicationId, String transactionServiceGroup, String transactionName, int timeout) {
-        this.transactionId = UUIDGenerator.generateUUID();
+        this.transactionId = UUIDGenerator.generateUUID(); // 事务的uuid
         this.status = GlobalStatus.Begin;
 
         this.applicationId = applicationId;
         this.transactionServiceGroup = transactionServiceGroup;
         this.transactionName = transactionName;
         this.timeout = timeout;
-        this.xid = XID.generateXID(transactionId);
+        this.xid = XID.generateXID(transactionId); // server ip + ":" + port + ":" + tranId;
     }
 
     /**
@@ -427,8 +427,7 @@ public class GlobalSession implements SessionLifecycle, SessionStorable {
      */
     public static GlobalSession createGlobalSession(String applicationId, String txServiceGroup, String txName,
                                                     int timeout) {
-        GlobalSession session = new GlobalSession(applicationId, txServiceGroup, txName, timeout);
-        return session;
+        return new GlobalSession(applicationId, txServiceGroup, txName, timeout);
     }
 
     /**
@@ -512,6 +511,8 @@ public class GlobalSession implements SessionLifecycle, SessionStorable {
             + 2 // byApplicationIdBytes.length
             + 2 // byServiceGroupBytes.length
             + 2 // byTxNameBytes.length
+            + 4 // xidBytes.length
+            + 4 // applicationDataBytes.length
             + 8 // beginTime
             + 1 // statusCode
             + (byApplicationIdBytes == null ? 0 : byApplicationIdBytes.length)
@@ -597,6 +598,7 @@ public class GlobalSession implements SessionLifecycle, SessionStorable {
         }
     }
 
+    // 全局事务锁
     private class GlobalSessionLock {
 
         private Lock globalSessionLock = new ReentrantLock();

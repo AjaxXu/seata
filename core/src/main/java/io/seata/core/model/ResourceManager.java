@@ -19,6 +19,7 @@ import java.util.Map;
 
 /**
  * Resource Manager: common behaviors.
+ * 资源管理器通用行为
  *
  * @author sharajava
  */
@@ -26,6 +27,7 @@ public interface ResourceManager extends ResourceManagerInbound, ResourceManager
 
     /**
      * Register a Resource to be managed by Resource Manager.
+     * 向resource manager 注册resource
      *
      * @param resource The resource to be managed.
      */
@@ -40,6 +42,7 @@ public interface ResourceManager extends ResourceManagerInbound, ResourceManager
 
     /**
      * Get all resources managed by this manager.
+     * 获得所有的被该manager管理的资源
      *
      * @return resourceId -> Resource Map
      */

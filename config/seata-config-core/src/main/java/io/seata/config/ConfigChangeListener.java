@@ -19,6 +19,7 @@ import java.util.concurrent.ExecutorService;
 
 /**
  * The interface Config change listener.
+ * 配置改变的监听器
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /12/20

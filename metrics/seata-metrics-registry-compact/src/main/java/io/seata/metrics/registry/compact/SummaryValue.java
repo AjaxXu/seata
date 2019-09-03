@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.LongAdder;
 
 /**
  * Record container for CompactSummary
+ * 汇总值
  *
  * @author zhengyangyong
  */

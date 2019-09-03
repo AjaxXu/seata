@@ -20,6 +20,7 @@ import io.seata.core.model.GlobalStatus;
 
 /**
  * The type Abstract global end response.
+ * 抽象全局事务最终响应结果
  *
  * @author sharajava
  */

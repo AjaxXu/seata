@@ -27,7 +27,6 @@ import io.netty.channel.Channel;
 import io.seata.common.thread.NamedThreadFactory;
 import io.seata.common.util.CollectionUtils;
 import io.seata.common.util.DurationUtil;
-import io.seata.config.ConfigurationFactory;
 import io.seata.core.constants.ConfigurationKeys;
 import io.seata.core.event.EventBus;
 import io.seata.core.event.GlobalTransactionEvent;
@@ -78,6 +77,7 @@ import static io.seata.core.exception.TransactionExceptionCode.FailedToSendBranc
 
 /**
  * The type Default coordinator.
+ * 默认的事务协调者
  */
 public class DefaultCoordinator extends AbstractTCInboundHandler
     implements TransactionMessageHandler, ResourceManagerInbound, Disposable {
@@ -115,10 +115,10 @@ public class DefaultCoordinator extends AbstractTCInboundHandler
 
     private static final int ALWAYS_RETRY_BOUNDARY = 0;
 
-    private static final Duration MAX_COMMIT_RETRY_TIMEOUT = ConfigurationFactory.getInstance().getDuration(
+    private static final Duration MAX_COMMIT_RETRY_TIMEOUT = CONFIG.getDuration(
         ConfigurationKeys.SERVICE_PREFIX + "max.commit.retry.timeout", DurationUtil.DEFAULT_DURATION, 100);
 
-    private static final Duration MAX_ROLLBACK_RETRY_TIMEOUT = ConfigurationFactory.getInstance().getDuration(
+    private static final Duration MAX_ROLLBACK_RETRY_TIMEOUT = CONFIG.getDuration(
         ConfigurationKeys.SERVICE_PREFIX + "max.rollback.retry.timeout", DurationUtil.DEFAULT_DURATION, 100);
 
     private ScheduledThreadPoolExecutor retryRollbacking = new ScheduledThreadPoolExecutor(1,
@@ -216,14 +216,17 @@ public class DefaultCoordinator extends AbstractTCInboundHandler
             request.setApplicationData(applicationData);
             request.setBranchType(branchType);
 
+            // 获取全局事务和分支事务
             GlobalSession globalSession = SessionHolder.findGlobalSession(xid);
             if (globalSession == null) {
                 return BranchStatus.PhaseTwo_Committed;
             }
             BranchSession branchSession = globalSession.getBranch(branchId);
 
+            // 根据 clientId和resourceId 找到对应的 channel 和 RpcContext
             BranchCommitResponse response = (BranchCommitResponse)messageSender.sendSyncRequest(resourceId,
                 branchSession.getClientId(), request);
+            // 返回分支事务提交状态
             return response.getBranchStatus();
         } catch (IOException | TimeoutException e) {
             throw new TransactionException(FailedToSendBranchCommitRequest, branchId + "/" + xid, e);
@@ -284,6 +287,7 @@ public class DefaultCoordinator extends AbstractTCInboundHandler
                 globalSession.changeStatus(GlobalStatus.TimeoutRollbacking);
 
                 //transaction timeout and start rollbacking event
+                // 事务超时，开始回滚事件
                 eventBus.post(
                     new GlobalTransactionEvent(globalSession.getTransactionId(), GlobalTransactionEvent.ROLE_TC,
                         globalSession.getTransactionName(), globalSession.getBeginTime(), null,
@@ -309,6 +313,7 @@ public class DefaultCoordinator extends AbstractTCInboundHandler
 
     /**
      * Handle retry rollbacking.
+     * 处理重试回滚
      */
     protected void handleRetryRollbacking() {
         Collection<GlobalSession> rollbackingSessions = SessionHolder.getRetryRollbackingSessionManager().allSessions();
@@ -410,7 +415,7 @@ public class DefaultCoordinator extends AbstractTCInboundHandler
             deleteRequest.setResourceId(resourceId);
             deleteRequest.setSaveDays(saveDays > 0 ? saveDays : UndoLogDeleteRequest.DEFAULT_SAVE_DAYS);
             try {
-                messageSender.sendASyncRequest(channelEntry.getValue(), deleteRequest);
+                messageSender.sendAsyncRequest(channelEntry.getValue(), deleteRequest);
             } catch (Exception e) {
                 LOGGER.error("Failed to async delete undo log resourceId = " + resourceId);
             }

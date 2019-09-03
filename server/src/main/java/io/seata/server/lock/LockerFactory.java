@@ -32,6 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The type Lock manager factory.
+ * 锁管理器工厂
  *
  * @author sharajava
  */
@@ -78,22 +79,24 @@ public class LockerFactory {
      * @return the lock manager
      */
     public static synchronized final Locker get(BranchSession branchSession) {
-        String storeMode = CONFIG.getConfig(ConfigurationKeys.STORE_MODE);
-        if (StoreMode.DB.name().equalsIgnoreCase(storeMode)) {
+        String storeMode = CONFIG.getConfig(ConfigurationKeys.STORE_MODE); // 存储模式
+        if (StoreMode.DB.name().equalsIgnoreCase(storeMode)) { // 存在db中
             if (lockerMap.get(storeMode) != null) {
                 return lockerMap.get(storeMode);
             }
             //init dataSource
+            // 初始化数据源
             String datasourceType = CONFIG.getConfig(ConfigurationKeys.STORE_DB_DATASOURCE_TYPE);
             DataSourceGenerator dataSourceGenerator = EnhancedServiceLoader.load(DataSourceGenerator.class,
                 datasourceType);
             DataSource logStoreDataSource = dataSourceGenerator.generateDataSource();
+            // DataBaseLocker
             locker = EnhancedServiceLoader.load(Locker.class, storeMode, new Class[] {DataSource.class},
                 new Object[] {logStoreDataSource});
             lockerMap.put(storeMode, locker);
         } else if (StoreMode.FILE.name().equalsIgnoreCase(storeMode)) {
             if (branchSession == null) {
-                throw new IllegalArgumentException("branchSession can be null for memory/file locker.");
+                throw new IllegalArgumentException("branchSession can not be null for memory/file locker.");
             }
             locker = EnhancedServiceLoader.load(Locker.class, storeMode,
                 new Class[] {BranchSession.class}, new Object[] {branchSession});

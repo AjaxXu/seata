@@ -19,6 +19,7 @@ import java.util.List;
 
 /**
  * The interface Lock store.
+ * 锁存储接口
  *
  * @author zhangsen
  * @data 2019 /4/25

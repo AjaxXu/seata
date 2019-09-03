@@ -25,6 +25,7 @@ import org.springframework.aop.target.EmptyTargetSource;
 
 /**
  * Proxy tools base on spring
+ * Spring代理工具类
  *
  * @author zhangsen
  */

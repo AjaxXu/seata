@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The type Config future.
+ * 配置的future
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /12/20
@@ -113,6 +114,7 @@ public class ConfigFuture {
 
     private Object getFailResult() {
         if (operation == ConfigOperation.GET) {
+            // 如果是GET，则返回默认的content
             return content;
         } else {
             return Boolean.FALSE;

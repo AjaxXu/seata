@@ -20,6 +20,7 @@ import java.util.List;
 
 /**
  * The interface Configuration.
+ * 配置的接口
  *
  * @param <T> the type parameter
  * @author jimin.jm @alibaba-inc.com
@@ -192,6 +193,7 @@ public interface Configuration<T> {
 
     /**
      * Gets config.
+     * 就是get string
      *
      * @param dataId the data id
      * @return the config
@@ -255,6 +257,7 @@ public interface Configuration<T> {
 
     /**
      * Add config listener.
+     * 添加配置监听器
      *
      * @param dataId   the data id
      * @param listener the listener
@@ -279,6 +282,7 @@ public interface Configuration<T> {
 
     /**
      * Gets config from sys pro.
+     * 从系统配置变量中查询
      *
      * @param dataId the data id
      * @return the config from sys pro

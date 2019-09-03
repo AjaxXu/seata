@@ -23,6 +23,7 @@ import java.io.Serializable;
 
 /**
  * The type to delete undolog  request.
+ * 删除undolog的请求
  *
  * @author github-ygy
  * @date 2019-6-14

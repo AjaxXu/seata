@@ -17,6 +17,7 @@ package io.seata.core.codec;
 
 /**
  * The interface Codec.
+ * 编码器接口
  *
  * @author zhangsen
  * @date 2019 /5/6

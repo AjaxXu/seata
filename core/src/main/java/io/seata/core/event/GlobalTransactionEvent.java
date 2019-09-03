@@ -19,6 +19,7 @@ import io.seata.core.model.GlobalStatus;
 
 /**
  * Event data for global transaction.
+ * 全局状态的事件数据
  *
  * @author zhengyangyong
  */

@@ -28,6 +28,7 @@ import java.util.List;
 
 /**
  * Template of executing business logic with a global transaction.
+ * 使用全局事务执行业务逻辑的模板
  *
  * @author sharajava
  */
@@ -45,9 +46,12 @@ public class TransactionalTemplate {
      */
     public Object execute(TransactionalExecutor business) throws Throwable {
         // 1. get or create a transaction
+        // 如果上游已经有 xid 传过来说明自己是下游，直接参与到这个全局事务中就可以，不必新开一个，角色是 Participant
+        // 如果上游没有 xid 传递过来，说明自己是发起方，新开启一个全局事务，角色是 Launcher
         GlobalTransaction tx = GlobalTransactionContext.getCurrentOrCreate();
 
         // 1.1 get transactionInfo
+        // 获取事务信息
         TransactionInfo txInfo = business.getTransactionInfo();
         if (txInfo == null) {
             throw new ShouldNeverHappenException("transactionInfo does not exist");
@@ -55,36 +59,42 @@ public class TransactionalTemplate {
         try {
 
             // 2. begin transaction
+            // 开启全局事务
             beginTransaction(txInfo, tx);
 
             Object rs = null;
             try {
 
                 // Do Your Business
+                // 调用业务方法
                 rs = business.execute();
 
             } catch (Throwable ex) {
 
                 // 3.the needed business exception to rollback.
+                // 如果抛异常，通知 TC 回滚全局事务
                 completeTransactionAfterThrowing(txInfo,tx,ex);
                 throw ex;
             }
 
             // 4. everything is fine, commit.
+            // 如果不抛异常，通知 TC 提交全局事务
             commitTransaction(tx);
 
             return rs;
         } finally {
             //5. clear
             triggerAfterCompletion();
-            cleanUp();
+            cleanUp(); // 清理事务hook
         }
     }
 
     private void completeTransactionAfterThrowing(TransactionInfo txInfo, GlobalTransaction tx, Throwable ex) throws TransactionalExecutor.ExecutionException {
-        //roll back
+        // roll back
+        // 在ex处回滚
         if (txInfo != null && txInfo.rollbackOn(ex)) {
             try {
+                // 回滚事务
                 rollbackTransaction(tx, ex);
             } catch (TransactionException txe) {
                 // Failed to rollback
@@ -93,6 +103,7 @@ public class TransactionalTemplate {
             }
         } else {
             // not roll back on this exception, so commit
+            // 在该异常处不需要回滚，则提交事务
             commitTransaction(tx);
         }
     }
@@ -120,7 +131,7 @@ public class TransactionalTemplate {
     private void beginTransaction(TransactionInfo txInfo, GlobalTransaction tx) throws TransactionalExecutor.ExecutionException {
         try {
             triggerBeforeBegin();
-            tx.begin(txInfo.getTimeOut(), txInfo.getName());
+            tx.begin(txInfo.getTimeOut(), txInfo.getName()); // 开始事务
             triggerAfterBegin();
         } catch (TransactionException txe) {
             throw new TransactionalExecutor.ExecutionException(tx, txe,
@@ -129,6 +140,7 @@ public class TransactionalTemplate {
         }
     }
 
+    // 事务开始前触发
     private void triggerBeforeBegin() {
         for (TransactionHook hook : getCurrentHooks()) {
             try {
@@ -139,6 +151,7 @@ public class TransactionalTemplate {
         }
     }
 
+    // 事务结束后触发
     private void triggerAfterBegin() {
         for (TransactionHook hook : getCurrentHooks()) {
             try {

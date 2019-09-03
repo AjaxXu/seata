@@ -22,6 +22,7 @@ import io.seata.core.model.Resource;
 
 /**
  * The type Tcc resource.
+ * TCC资源，代表一个TCC接口.
  *
  * @author zhangsen
  */
@@ -31,19 +32,19 @@ public class TCCResource implements Resource {
 
     private String appName;
 
-    private String actionName;
+    private String actionName; // TCC 名称
 
-    private Object targetBean;
+    private Object targetBean; // TCC bean
 
-    private Method prepareMethod;
+    private Method prepareMethod; // try 方法
 
     private String commitMethodName;
 
-    private Method commitMethod;
+    private Method commitMethod; // commit 方法
 
     private String rollbackMethodName;
 
-    private Method rollbackMethod;
+    private Method rollbackMethod; // rollback 方法
 
     @Override
     public String getResourceGroupId() {

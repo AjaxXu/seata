@@ -21,6 +21,7 @@ import io.seata.core.constants.ServerTableColumnsName;
 
 /**
  * database log store SQLs
+ * 基于数据库的日志存储SQLs
  *
  * @author zhangsen
  * @date 2019 /4/2

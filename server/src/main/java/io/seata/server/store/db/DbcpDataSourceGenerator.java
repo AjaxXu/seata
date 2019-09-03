@@ -23,6 +23,7 @@ import javax.sql.DataSource;
 
 /**
  * The type Dbcp data source generator.
+ * Dbcp data source生成器
  *
  * @author zhangsen
  * @data 2019 /4/24
@@ -45,7 +46,7 @@ public class DbcpDataSourceGenerator extends AbstractDataSourceGenerator {
         ds.setTimeBetweenEvictionRunsMillis(120000);
         ds.setNumTestsPerEvictionRun(1);
         ds.setTestWhileIdle(true);
-        ds.setValidationQuery(getValidationQuery(getDBType()));
+        ds.setValidationQuery(getValidationQuery(getDBType())); // 设置验证查询语句
         ds.setConnectionProperties("useUnicode=yes;characterEncoding=utf8;socketTimeout=5000;connectTimeout=500");
         return ds;
     }

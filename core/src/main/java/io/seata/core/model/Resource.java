@@ -17,6 +17,7 @@ package io.seata.core.model;
 
 /**
  * Resource that can be managed by Resource Manager and involved into global transaction.
+ * 被Resource Manager管理的资源，设计分布式事务
  *
  * @author sharajava
  */
@@ -25,6 +26,7 @@ public interface Resource {
     /**
      * Get the resource group id.
      * e.g. master and slave data-source should be with the same resource group id.
+     * 主备数据源必须拥有相同的资源组id
      *
      * @return resource group id.
      */
@@ -41,7 +43,7 @@ public interface Resource {
     /**
      * get resource type, AT、TCC etc.
      *
-     * @return
+     * @return 事务类型
      */
     BranchType getBranchType();
 

@@ -20,6 +20,7 @@ import java.util.Map;
 
 /**
  * The enum Transaction exception code.
+ * 事务异常编码
  *
  * @author sharajava
  */

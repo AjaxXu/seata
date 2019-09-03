@@ -17,13 +17,14 @@ package io.seata.rm.tcc.remoting;
 
 /**
  * remoting bean info
+ * 远程bean信息
  *
  * @author zhangsen
  */
 public class RemotingDesc {
 
     /**
-     * is referenc bean ?
+     * is reference bean ?
      */
     private boolean isReference = false;
 
@@ -33,12 +34,14 @@ public class RemotingDesc {
     private Object targetBean;
 
     /**
-     * the tcc interface tyep
+     * the tcc interface type
+     * tcc接口类
      */
     private Class<?> interfaceClass;
 
     /**
      * interface class name
+     * tcc接口名称
      */
     private String interfaceClassName;
 

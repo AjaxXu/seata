@@ -34,6 +34,7 @@ import io.seata.metrics.Timer;
 
 /**
  * Compact Registry implement, this registry only compute all Measurements when call measure method and do not cache
+ * 压缩登记类实现
  *
  * @author zhengyangyong
  */

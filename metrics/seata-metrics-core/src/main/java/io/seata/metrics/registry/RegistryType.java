@@ -19,6 +19,7 @@ import io.seata.common.exception.NotSupportYetException;
 
 /**
  * Supported metrics registry type
+ * 登记类型
  *
  * @author zhengyangyong
  */

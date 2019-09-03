@@ -22,6 +22,7 @@ import java.util.Objects;
 
 /**
  * The type Configuration factory.
+ * 配置工厂
  *
  * @author jimin.jm @alibaba-inc.com
  * @author Geng Zhang
@@ -43,8 +44,10 @@ public final class ConfigurationFactory {
         }
     }
 
+    // 默认配置文件registry.conf
     private static final Configuration DEFAULT_FILE_INSTANCE = new FileConfiguration(
         REGISTRY_CONF_PREFIX + REGISTRY_CONF_SUFFIX);
+    // 当前文件配置实例
     public static final Configuration CURRENT_FILE_INSTANCE = null == envValue ? DEFAULT_FILE_INSTANCE : new FileConfiguration(REGISTRY_CONF_PREFIX + "-" + envValue
         + REGISTRY_CONF_SUFFIX);
     private static final String NAME_KEY = "name";
@@ -72,6 +75,7 @@ public final class ConfigurationFactory {
         ConfigType configType = null;
         String configTypeName = null;
         try {
+            // get config.type
             configTypeName = CURRENT_FILE_INSTANCE.getConfig(
                 ConfigurationKeys.FILE_ROOT_CONFIG + ConfigurationKeys.FILE_CONFIG_SPLIT_CHAR
                     + ConfigurationKeys.FILE_ROOT_TYPE);
@@ -80,9 +84,11 @@ public final class ConfigurationFactory {
             throw new NotSupportYetException("not support register type: " + configTypeName, e);
         }
         if (ConfigType.File == configType) {
+            // config.file.name
             String pathDataId = ConfigurationKeys.FILE_ROOT_CONFIG + ConfigurationKeys.FILE_CONFIG_SPLIT_CHAR
                 + FILE_TYPE + ConfigurationKeys.FILE_CONFIG_SPLIT_CHAR
                 + NAME_KEY;
+            // 对于默认配置，得到的是file.conf
             String name = CURRENT_FILE_INSTANCE.getConfig(pathDataId);
             return new FileConfiguration(name);
         } else {

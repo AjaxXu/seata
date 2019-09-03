@@ -23,6 +23,7 @@ import io.seata.server.session.GlobalSession;
 
 /**
  * The interface Core.
+ * TC 服务接口
  *
  * @author sharajava
  */
@@ -37,6 +38,7 @@ public interface Core extends TransactionManager, ResourceManagerOutbound {
 
     /**
      * Do global commit.
+     * 全局commit
      *
      * @param globalSession the global session
      * @param retrying      the retrying
@@ -46,6 +48,7 @@ public interface Core extends TransactionManager, ResourceManagerOutbound {
 
     /**
      * Do global rollback.
+     * 全局rollback
      *
      * @param globalSession the global session
      * @param retrying      the retrying

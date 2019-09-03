@@ -32,6 +32,7 @@ import io.seata.server.session.BranchSession;
 
 /**
  * The type Memory locker.
+ * 基于内存的locker
  *
  * @author zhangsen
  * @data 2019 -05-15
@@ -72,40 +73,26 @@ public class MemoryLocker extends AbstractLocker {
         long transactionId = branchSession.getTransactionId();
 
         ConcurrentHashMap<Map<String, Long>, Set<String>> bucketHolder = branchSession.getLockHolder();
-        ConcurrentHashMap<String, ConcurrentHashMap<Integer, Map<String, Long>>> dbLockMap = LOCK_MAP.get(resourceId);
-        if (dbLockMap == null) {
-            LOCK_MAP.putIfAbsent(resourceId,
-                new ConcurrentHashMap<String, ConcurrentHashMap<Integer, Map<String, Long>>>());
-            dbLockMap = LOCK_MAP.get(resourceId);
-        }
+        ConcurrentHashMap<String, ConcurrentHashMap<Integer, Map<String, Long>>> dbLockMap = LOCK_MAP.computeIfAbsent(resourceId, k -> new ConcurrentHashMap<>());
 
         for (RowLock lock : rowLocks) {
             String tableName = lock.getTableName();
             String pk = lock.getPk();
-            ConcurrentHashMap<Integer, Map<String, Long>> tableLockMap = dbLockMap.get(tableName);
-            if (tableLockMap == null) {
-                dbLockMap.putIfAbsent(tableName, new ConcurrentHashMap<Integer, Map<String, Long>>());
-                tableLockMap = dbLockMap.get(tableName);
-            }
+            ConcurrentHashMap<Integer, Map<String, Long>> tableLockMap = dbLockMap.computeIfAbsent(tableName, k -> new ConcurrentHashMap<>());
+
             int bucketId = pk.hashCode() % BUCKET_PER_TABLE;
-            Map<String, Long> bucketLockMap = tableLockMap.get(bucketId);
-            if (bucketLockMap == null) {
-                tableLockMap.putIfAbsent(bucketId, new ConcurrentHashMap<String, Long>());
-                bucketLockMap = tableLockMap.get(bucketId);
-            }
+            Map<String, Long> bucketLockMap = tableLockMap.computeIfAbsent(bucketId, k -> new ConcurrentHashMap<>());
+
             synchronized (bucketLockMap) {
                 Long lockingTransactionId = bucketLockMap.get(pk);
                 if (lockingTransactionId == null) {
                     //No existing lock
+                    // lock 不存在
                     bucketLockMap.put(pk, transactionId);
-                    Set<String> keysInHolder = bucketHolder.get(bucketLockMap);
-                    if (keysInHolder == null) {
-                        bucketHolder.putIfAbsent(bucketLockMap, new ConcurrentSet<String>());
-                        keysInHolder = bucketHolder.get(bucketLockMap);
-                    }
+                    Set<String> keysInHolder = bucketHolder.computeIfAbsent(bucketLockMap, k -> new ConcurrentSet<>());
                     keysInHolder.add(pk);
 
-                } else if (lockingTransactionId.longValue() == transactionId) {
+                } else if (lockingTransactionId == transactionId) {
                     // Locked by me
                     continue;
                 } else {
@@ -140,7 +127,7 @@ public class MemoryLocker extends AbstractLocker {
                     if (v == null) {
                         continue;
                     }
-                    if (v.longValue() == branchSession.getTransactionId()) {
+                    if (v == branchSession.getTransactionId()) {
                         bucket.remove(key);
                     }
                 }

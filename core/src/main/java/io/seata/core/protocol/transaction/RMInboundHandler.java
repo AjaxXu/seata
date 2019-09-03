@@ -17,6 +17,7 @@ package io.seata.core.protocol.transaction;
 
 /**
  * The interface Rm inbound handler.
+ * 进入Rm的处理器
  *
  * @author sharajava
  */

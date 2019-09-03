@@ -25,6 +25,7 @@ import io.seata.common.exception.ShouldNeverHappenException;
 
 /**
  * The type Uuid generator.
+ * UUID生成器
  *
  * @author sharajava
  */

@@ -17,6 +17,7 @@ package io.seata.metrics;
 
 /**
  * Counter interface for metrics
+ * 监控指标counter
  *
  * @author zhengyangyong
  */

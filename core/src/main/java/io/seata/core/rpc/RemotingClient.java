@@ -17,6 +17,7 @@ package io.seata.core.rpc;
 
 /**
  * The interface remoting client.
+ * 远程客户端接口
  *
  * @author zhaojun
  */

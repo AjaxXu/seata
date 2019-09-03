@@ -20,6 +20,7 @@ import io.seata.core.rpc.RpcContext;
 
 /**
  * The type Branch commit request.
+ * 分支提交请求
  *
  * @author sharajava
  */

@@ -17,6 +17,7 @@ package io.seata.metrics;
 
 /**
  * Value of meter
+ * 计量值
  *
  * @author zhengyangyong
  */

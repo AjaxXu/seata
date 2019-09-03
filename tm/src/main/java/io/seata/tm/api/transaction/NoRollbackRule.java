@@ -17,6 +17,7 @@ package io.seata.tm.api.transaction;
 
 
 /**
+ * 不回滚规则
  * @author guoyao
  * @date 2019/4/17
  */

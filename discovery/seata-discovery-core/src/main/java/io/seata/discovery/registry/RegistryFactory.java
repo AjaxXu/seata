@@ -27,6 +27,7 @@ import java.util.Objects;
 
 /**
  * The type Registry factory.
+ * 注册工厂类
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2019 /2/1

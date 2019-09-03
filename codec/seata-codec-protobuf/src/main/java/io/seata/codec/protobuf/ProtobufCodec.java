@@ -26,6 +26,7 @@ import io.seata.core.codec.Codec;
 
 /**
  * The type Protobuf codec.
+ * Protobuf类型的编解码器
  *
  * @author leizhiyuan
  * @date 2019 /5/6

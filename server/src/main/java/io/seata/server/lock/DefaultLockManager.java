@@ -26,6 +26,7 @@ import io.seata.server.session.BranchSession;
 
 /**
  * The type Default lock manager.
+ * 默认锁管理器
  *
  * @author zhangsen
  * @data 2019 -05-15
@@ -36,11 +37,6 @@ public class DefaultLockManager extends AbstractLockManager {
 
     @Override
     public boolean acquireLock(BranchSession branchSession) throws TransactionException {
-        String lockKey = branchSession.getLockKey();
-        if (StringUtils.isNullOrEmpty(lockKey)) {
-            //no lock
-            return true;
-        }
         //get locks of branch
         List<RowLock> locks = collectRowLocks(branchSession);
         if (CollectionUtils.isEmpty(locks)) {

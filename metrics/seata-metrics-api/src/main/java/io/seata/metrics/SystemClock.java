@@ -17,6 +17,7 @@ package io.seata.metrics;
 
 /**
  * Default clock implement use system
+ * 系统时钟
  *
  * @author zhengyangyong
  */

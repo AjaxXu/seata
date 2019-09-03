@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Exporter Factory for load all configured exporters
+ * 输出工厂
  *
  * @author zhengyangyong
  */

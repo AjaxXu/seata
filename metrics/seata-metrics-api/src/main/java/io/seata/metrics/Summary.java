@@ -17,6 +17,7 @@ package io.seata.metrics;
 
 /**
  * Summary interface for metrics
+ * 监控指标汇总
  *
  * @author zhengyangyong
  */

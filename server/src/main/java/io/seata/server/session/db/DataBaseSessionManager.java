@@ -41,9 +41,10 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The Data base session manager.
+ * 基于数据库的session管理器
  *
  * @author zhangsen
- * @data 2019 /4/4
+ * @date 2019/4/4
  */
 @LoadLevel(name = "db")
 public class DataBaseSessionManager extends AbstractSessionManager
@@ -84,6 +85,7 @@ public class DataBaseSessionManager extends AbstractSessionManager
     @Override
     public void addGlobalSession(GlobalSession session) throws TransactionException {
         if (StringUtils.isBlank(taskName)) {
+            // Root transactionStoreManager
             boolean ret = transactionStoreManager.writeSession(LogOperation.GLOBAL_ADD, session);
             if (!ret) {
                 throw new StoreException("addGlobalSession failed.");
@@ -160,6 +162,7 @@ public class DataBaseSessionManager extends AbstractSessionManager
     @Override
     public Collection<GlobalSession> allSessions() {
         //get by taskName
+        // 根据任务名称获取GlobalSession
         if (SessionHolder.ASYNC_COMMITTING_SESSION_MANAGER_NAME.equalsIgnoreCase(taskName)) {
             return findGlobalSessions(new SessionCondition(GlobalStatus.AsyncCommitting));
         } else if (SessionHolder.RETRY_COMMITTING_SESSION_MANAGER_NAME.equalsIgnoreCase(taskName)) {
@@ -169,6 +172,7 @@ public class DataBaseSessionManager extends AbstractSessionManager
                 GlobalStatus.TimeoutRollbacking, GlobalStatus.TimeoutRollbackRetrying}));
         } else {
             //all data
+            // 获取所有的GlobalSession
             return findGlobalSessions(new SessionCondition(new GlobalStatus[] {
                 GlobalStatus.UnKnown, GlobalStatus.Begin,
                 GlobalStatus.Committing, GlobalStatus.CommitRetrying, GlobalStatus.Rollbacking,

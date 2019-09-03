@@ -22,6 +22,7 @@ import io.seata.rm.tcc.remoting.RemotingDesc;
 
 /**
  * dubbo  remoting bean parsing
+ * dubbo 远程bean解析
  *
  * @author zhangsen
  */

@@ -26,6 +26,7 @@ import java.nio.charset.Charset;
 
 /**
  * The type Abstract message.
+ * 抽象消息
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /9/14

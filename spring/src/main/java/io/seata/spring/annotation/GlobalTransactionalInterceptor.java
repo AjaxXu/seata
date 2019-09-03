@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
 
 /**
  * The type Global transactional interceptor.
+ * 全局事务切面逻辑
  *
  * @author jimin.jm @alibaba-inc.com
  */
@@ -81,6 +82,7 @@ public class GlobalTransactionalInterceptor implements MethodInterceptor {
         }
     }
 
+    // 处理全局锁
     private Object handleGlobalLock(final MethodInvocation methodInvocation) throws Exception {
         return globalLockTemplate.execute(() -> {
             try {
@@ -95,15 +97,17 @@ public class GlobalTransactionalInterceptor implements MethodInterceptor {
         });
     }
 
+    // 处理全局事务
     private Object handleGlobalTransaction(final MethodInvocation methodInvocation,
                                            final GlobalTransactional globalTrxAnno) throws Throwable {
         try {
             return transactionalTemplate.execute(new TransactionalExecutor() {
                 @Override
                 public Object execute() throws Throwable {
-                    return methodInvocation.proceed();
+                    return methodInvocation.proceed(); // 执行业务方法
                 }
 
+                // 从注解中获得name或者根据方法获得name
                 public String name() {
                     String name = globalTrxAnno.name();
                     if (!StringUtils.isNullOrEmpty(name)) {
@@ -115,15 +119,19 @@ public class GlobalTransactionalInterceptor implements MethodInterceptor {
                 @Override
                 public TransactionInfo getTransactionInfo() {
                     TransactionInfo transactionInfo = new TransactionInfo();
+                    // 从注解中获得超时时间
                     transactionInfo.setTimeOut(globalTrxAnno.timeoutMills());
+                    // 设置名称
                     transactionInfo.setName(name());
                     Set<RollbackRule> rollbackRules = new LinkedHashSet<>();
+                    // 设置回滚规则
                     for (Class<?> rbRule : globalTrxAnno.rollbackFor()) {
                         rollbackRules.add(new RollbackRule(rbRule));
                     }
                     for (String rbRule : globalTrxAnno.rollbackForClassName()) {
                         rollbackRules.add(new RollbackRule(rbRule));
                     }
+                    // 设置不回滚规则
                     for (Class<?> rbRule : globalTrxAnno.noRollbackFor()) {
                         rollbackRules.add(new NoRollbackRule(rbRule));
                     }

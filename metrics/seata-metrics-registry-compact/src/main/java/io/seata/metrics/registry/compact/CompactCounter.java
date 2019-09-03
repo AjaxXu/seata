@@ -26,6 +26,7 @@ import io.seata.metrics.SystemClock;
 
 /**
  * Compact Counter implement with AtomicLong
+ * 压缩计数器
  *
  * @author zhengyangyong
  */

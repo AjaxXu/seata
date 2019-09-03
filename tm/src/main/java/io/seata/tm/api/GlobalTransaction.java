@@ -20,6 +20,7 @@ import io.seata.core.model.GlobalStatus;
 
 /**
  * Global transaction.
+ * 全局事务
  *
  * @author sharajava
  */
@@ -54,6 +55,7 @@ public interface GlobalTransaction {
 
     /**
      * Commit the global transaction.
+     * 提交全局事务
      *
      * @throws TransactionException Any exception that fails this will be wrapped with TransactionException and thrown
      * out.
@@ -62,6 +64,7 @@ public interface GlobalTransaction {
 
     /**
      * Rollback the global transaction.
+     * 回滚全局事务
      *
      * @throws TransactionException Any exception that fails this will be wrapped with TransactionException and thrown
      * out.
@@ -70,7 +73,7 @@ public interface GlobalTransaction {
 
     /**
      * Ask TC for current status of the corresponding global transaction.
-     *
+     * 向TC询问对应全局事务的当前状态
      * @return Status of the corresponding global transaction.
      * @throws TransactionException Any exception that fails this will be wrapped with TransactionException and thrown
      * out.

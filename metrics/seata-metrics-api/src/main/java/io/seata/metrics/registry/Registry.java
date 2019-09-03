@@ -26,6 +26,7 @@ import io.seata.metrics.Timer;
 
 /**
  * Registry interface for metrics
+ * 监控指标登记接口
  *
  * @author zhengyangyong
  */

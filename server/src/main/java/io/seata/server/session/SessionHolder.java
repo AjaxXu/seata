@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The type Session holder.
+ * Session持有者
  *
  * @author sharajava
  */
@@ -93,6 +94,7 @@ public class SessionHolder {
         StoreMode storeMode = StoreMode.valueof(mode);
         if (StoreMode.DB.equals(storeMode)) {
             //database store
+            // 数据库存储
             ROOT_SESSION_MANAGER = EnhancedServiceLoader.load(SessionManager.class, StoreMode.DB.name());
             ASYNC_COMMITTING_SESSION_MANAGER = EnhancedServiceLoader.load(SessionManager.class, StoreMode.DB.name(),
                 new Object[] {ASYNC_COMMITTING_SESSION_MANAGER_NAME});

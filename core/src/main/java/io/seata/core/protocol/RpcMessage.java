@@ -20,6 +20,7 @@ import java.util.Map;
 
 /**
  * The type Rpc message.
+ * RPC消息
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /9/14

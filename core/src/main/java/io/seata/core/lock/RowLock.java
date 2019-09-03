@@ -19,6 +19,7 @@ import io.seata.common.util.StringUtils;
 
 /**
  * The type Row lock.
+ * 行锁
  *
  * @author zhangsen
  * @date 2019 -05-15

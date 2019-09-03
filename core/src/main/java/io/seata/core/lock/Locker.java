@@ -19,6 +19,7 @@ import java.util.List;
 
 /**
  * The interface Locker.
+ * 锁接口
  *
  * @author zhangsen
  * @date 2019 -05-15

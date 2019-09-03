@@ -20,6 +20,7 @@ import io.seata.metrics.Id;
 
 /**
  * Constants for meter id in tc
+ * tc中计量id的常量
  *
  * @author zhengyangyong
  */

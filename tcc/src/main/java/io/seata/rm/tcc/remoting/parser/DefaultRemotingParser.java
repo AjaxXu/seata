@@ -34,6 +34,7 @@ import io.seata.rm.tcc.remoting.RemotingParser;
 
 /**
  * parsing remoting bean
+ * 解析远程bean
  *
  * @author zhangsen
  */
@@ -42,7 +43,7 @@ public class DefaultRemotingParser {
     /**
      * all remoting bean parser
      */
-    protected static List<RemotingParser> allRemotingParsers = new ArrayList<RemotingParser>();
+    protected static List<RemotingParser> allRemotingParsers = new ArrayList<>();
 
     /**
      * all remoting beans beanName -> RemotingDesc
@@ -64,6 +65,7 @@ public class DefaultRemotingParser {
 
     /**
      * Instantiates a new Default remoting parser.
+     * 实例化一个新的默认的远程解析器
      */
     protected DefaultRemotingParser() {
         initRemotingParser();
@@ -71,6 +73,7 @@ public class DefaultRemotingParser {
 
     /**
      * init parsers
+     * 获得所有RemotingParser的实现类实例对象
      */
     protected void initRemotingParser() {
         //init all resource managers
@@ -82,6 +85,7 @@ public class DefaultRemotingParser {
 
     /**
      * is remoting bean ?
+     * 由具体的RemotingParser实现类判断
      *
      * @param bean     the bean
      * @param beanName the bean name
@@ -130,6 +134,7 @@ public class DefaultRemotingParser {
 
     /**
      * get the remoting Service desc
+     * 获得远程服务的描述信息
      *
      * @param bean     the bean
      * @param beanName the bean name
@@ -154,6 +159,7 @@ public class DefaultRemotingParser {
 
     /**
      * parse the remoting bean info
+     * 解析远程bean的信息
      *
      * @param bean     the bean
      * @param beanName the bean name
@@ -171,24 +177,30 @@ public class DefaultRemotingParser {
         if (isService(bean, beanName)) {
             try {
                 //service bean， registry resource
+                // 如果是 TCC service Bean，解析并注册该 resource
                 Object targetBean = remotingBeanDesc.getTargetBean();
                 for (Method m : methods) {
                     TwoPhaseBusinessAction twoPhaseBusinessAction = m.getAnnotation(TwoPhaseBusinessAction.class);
                     if (twoPhaseBusinessAction != null) {
-                        //
+                        // 如果有 TCC 参与方注解，定义一个 TCCResource
                         TCCResource tccResource = new TCCResource();
                         tccResource.setActionName(twoPhaseBusinessAction.name());
+                        // TCC Bean
                         tccResource.setTargetBean(targetBean);
+                        // try 方法
                         tccResource.setPrepareMethod(m);
                         tccResource.setCommitMethodName(twoPhaseBusinessAction.commitMethod());
+                        // confirm 方法对象
                         tccResource.setCommitMethod(ReflectionUtil
                             .getMethod(interfaceClass, twoPhaseBusinessAction.commitMethod(),
                                 new Class[] {BusinessActionContext.class}));
                         tccResource.setRollbackMethodName(twoPhaseBusinessAction.rollbackMethod());
+                        // cancel 方法对象
                         tccResource.setRollbackMethod(ReflectionUtil
                             .getMethod(interfaceClass, twoPhaseBusinessAction.rollbackMethod(),
                                 new Class[] {BusinessActionContext.class}));
-                        //registry tcc resource
+                        // registry tcc resource
+                        // 调用到 TCCResourceManager 的 registerResource 方法
                         DefaultResourceManager.get().registerResource(tccResource);
                     }
                 }

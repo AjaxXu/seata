@@ -28,6 +28,7 @@ import java.net.InetSocketAddress;
 
 /**
  * The type Netty key poolable factory.
+ * Netty 键池化工厂
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /11/19
@@ -54,7 +55,7 @@ public class NettyPoolableFactory implements KeyedPoolableObjectFactory<NettyPoo
     @Override
     public Channel makeObject(NettyPoolKey key) {
         InetSocketAddress address = NetUtil.toInetSocketAddress(key.getAddress());
-            if (LOGGER.isInfoEnabled()) {
+        if (LOGGER.isInfoEnabled()) {
             LOGGER.info("NettyPool create channel to " + key);
         }
         Channel tmpChannel = clientBootstrap.getNewChannel(address);
@@ -88,14 +89,17 @@ public class NettyPoolableFactory implements KeyedPoolableObjectFactory<NettyPoo
         return channelToServer;
     }
 
+    // 判断response 是否成功
     private boolean isResponseSuccess(Object response, NettyPoolKey.TransactionRole transactionRole) {
         if (null == response) { return false; }
         if (transactionRole.equals(NettyPoolKey.TransactionRole.TMROLE)) {
+            // 如果事务角色是TM，判断response是不是RegisterTMResponse
             if (!(response instanceof RegisterTMResponse)) {
                 return false;
             }
             return ((RegisterTMResponse) response).isIdentified();
         } else if (transactionRole.equals(NettyPoolKey.TransactionRole.RMROLE)) {
+            // 如果事务角色是RM，判断response是不是RegisterRMResponse
             if (!(response instanceof RegisterRMResponse)) {
                 return false;
             }

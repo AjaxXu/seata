@@ -20,6 +20,7 @@ import io.seata.common.util.StringUtils;
 import java.io.Serializable;
 
 /**
+ * 回滚规则
  * @author guoyao
  * @date 2019/4/17
  */

@@ -20,6 +20,7 @@ import io.seata.core.rpc.RpcContext;
 
 /**
  * The type Global lock query request.
+ * 全局锁查询
  *
  * @author jimin.jm @alibaba-inc.com
  */

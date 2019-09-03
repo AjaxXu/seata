@@ -17,6 +17,7 @@ package io.seata.common;
 
 /**
  * The type Xid.
+ * 事务ID
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /10/10
@@ -57,6 +58,7 @@ public class XID {
 
     /**
      * Gets transaction id.
+     * 根据xid获取transaction id
      *
      * @param xid the xid
      * @return the transaction id

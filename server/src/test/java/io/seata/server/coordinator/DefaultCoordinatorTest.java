@@ -189,7 +189,7 @@ public class DefaultCoordinatorTest {
         }
 
         @Override
-        public Object sendASyncRequest(Channel channel, Object message) throws IOException, TimeoutException {
+        public Object sendAsyncRequest(Channel channel, Object message) throws IOException, TimeoutException {
             return null;
         }
     }

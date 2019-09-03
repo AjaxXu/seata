@@ -19,6 +19,7 @@ import java.lang.reflect.Method;
 
 /**
  * The type Method desc.
+ * 方法描述
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /12/28

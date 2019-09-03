@@ -24,6 +24,7 @@ import io.seata.server.store.TransactionStoreManager.LogOperation;
 
 /**
  * The type Transaction write store.
+ * 事务存储
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /12/11

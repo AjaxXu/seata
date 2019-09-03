@@ -19,6 +19,7 @@ import io.seata.core.protocol.MessageType;
 
 /**
  * The type Branch commit response.
+ * 分支commit的响应结果
  *
  * @author sharajava
  */

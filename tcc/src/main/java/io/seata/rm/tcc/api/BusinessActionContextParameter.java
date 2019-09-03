@@ -25,6 +25,7 @@ import java.lang.annotation.Target;
  * <p>
  * add this annotation on the parameters of the try method, and the parameters will be passed to  the
  * BusinessActivityContext
+ * 方法参数
  *
  * @author zhangsen
  */
@@ -34,6 +35,7 @@ public @interface BusinessActionContextParameter {
 
     /**
      * parameter's name
+     * 参数名
      *
      * @return the string
      */
@@ -55,6 +57,7 @@ public @interface BusinessActionContextParameter {
 
     /**
      * if get the parameter from the property of the object ?
+     * 参数是否在对象属性中
      *
      * @return boolean boolean
      */

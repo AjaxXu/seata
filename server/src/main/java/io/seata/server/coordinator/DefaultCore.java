@@ -41,6 +41,7 @@ import static io.seata.core.exception.TransactionExceptionCode.LockKeyConflict;
 
 /**
  * The type Default core.
+ * 默认的TC实现
  *
  * @author sharajava
  */
@@ -68,23 +69,29 @@ public class DefaultCore implements Core {
                 throw new TransactionException(GlobalTransactionNotActive,
                     "Current Status: " + globalSession.getStatus());
             }
+            // 当前状态不是begin，抛出异常
             if (globalSession.getStatus() != GlobalStatus.Begin) {
                 throw new TransactionException(GlobalTransactionStatusInvalid,
                     globalSession.getStatus() + " while expecting " + GlobalStatus.Begin);
             }
+            // 添加session lifecycle监听器
             globalSession.addSessionLifecycleListener(SessionHolder.getRootSessionManager());
+            // 开启分支session
             BranchSession branchSession = SessionHelper.newBranchByGlobal(globalSession, branchType, resourceId,
                 applicationData, lockKeys, clientId);
             if (!branchSession.lock()) {
+                // 分支session没有锁住，抛出异常
                 throw new TransactionException(LockKeyConflict);
             }
             try {
+                // 将分支事务加入全局事务中，也会写文件
                 globalSession.addBranch(branchSession);
             } catch (RuntimeException ex) {
                 branchSession.unlock();
                 LOGGER.error("Failed to add branchSession to globalSession:{}",ex.getMessage(),ex);
                 throw new TransactionException(FailedToAddBranch);
             }
+            // 返回分支事务 ID
             return branchSession.getBranchId();
         });
     }
@@ -138,6 +145,7 @@ public class DefaultCore implements Core {
 
     @Override
     public GlobalStatus commit(String xid) throws TransactionException {
+        // 根据 xid 找出 GlobalSession
         GlobalSession globalSession = SessionHolder.findGlobalSession(xid);
         if (globalSession == null) {
             return GlobalStatus.Finished;
@@ -146,9 +154,11 @@ public class DefaultCore implements Core {
         // just lock changeStatus
         boolean shouldCommit = globalSession.lockAndExcute(() -> {
             //the lock should release after branch commit
+            // 关闭这个 GlobalSession，不让后续的分支事务再注册上来
             globalSession
                 .closeAndClean(); // Highlight: Firstly, close the session, then no more branch can be registered.
             if (globalSession.getStatus() == GlobalStatus.Begin) {
+                // 修改状态为提交进行中
                 globalSession.changeStatus(GlobalStatus.Committing);
                 return true;
             }
@@ -166,6 +176,7 @@ public class DefaultCore implements Core {
         return globalSession.getStatus();
     }
 
+    // 分支commit
     @Override
     public void doGlobalCommit(GlobalSession globalSession, boolean retrying) throws TransactionException {
         //start committing event
@@ -179,6 +190,7 @@ public class DefaultCore implements Core {
                 continue;
             }
             try {
+                // 调用 DefaultCoordinator 的 branchCommit 方法做分支提交
                 BranchStatus branchStatus = resourceManagerInbound.branchCommit(branchSession.getBranchType(),
                     branchSession.getXid(), branchSession.getBranchId(),
                     branchSession.getResourceId(), branchSession.getApplicationData());
@@ -298,6 +310,7 @@ public class DefaultCore implements Core {
                 globalSession.removeBranch(branchSession);
                 continue;
             }
+            // 分支回滚
             try {
                 BranchStatus branchStatus = resourceManagerInbound.branchRollback(branchSession.getBranchType(),
                     branchSession.getXid(), branchSession.getBranchId(),

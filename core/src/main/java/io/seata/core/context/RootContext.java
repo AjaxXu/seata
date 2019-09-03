@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The type Root context.
+ * 根上下文
  *
  * @author jimin.jm @alibaba-inc.com
  */
@@ -75,7 +76,7 @@ public class RootContext {
     /**
      * Unbind string.
      *
-     * @return the string
+     * @return 事务id
      */
     public static String unbind() {
         String xid = CONTEXT_HOLDER.remove(KEY_XID);
@@ -93,7 +94,8 @@ public class RootContext {
     }
 
     /**
-     * In global transaction boolean.
+     * In global transaction.
+     * 判断是否在全局事务
      *
      * @return the boolean
      */
@@ -104,7 +106,7 @@ public class RootContext {
     /**
      * requires global lock check
      *
-     * @return
+     * @return 是否获取到全局锁
      */
     public static boolean requireGlobalLock() {
         return CONTEXT_HOLDER.get(KEY_GLOBAL_LOCK_FLAG) != null;

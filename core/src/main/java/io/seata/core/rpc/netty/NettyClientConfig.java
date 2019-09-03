@@ -19,14 +19,15 @@ import io.netty.channel.Channel;
 
 /**
  * The type Netty client config.
+ * netty客户端配置信息
  *
  * @author jimin.jm @alibaba-inc.com
  */
 public class NettyClientConfig extends NettyBaseConfig {
 
-    private int connectTimeoutMillis = 10000;
-    private int clientSocketSndBufSize = 153600;
-    private int clientSocketRcvBufSize = 153600;
+    private int connectTimeoutMillis = 10000; // 连接超时时间，10s
+    private int clientSocketSndBufSize = 153600; // 150k
+    private int clientSocketRcvBufSize = 153600; // 150k
     private int clientWorkerThreads = WORKER_THREAD_SIZE;
     private final Class<? extends Channel> clientChannelClazz = CLIENT_CHANNEL_CLAZZ;
     private int perHostMaxConn = 2;
@@ -433,6 +434,7 @@ public class NettyClientConfig extends NettyBaseConfig {
      * @return the tm dispatch thread prefix
      */
     public String getTmDispatchThreadPrefix() {
+        // rpcDispatch_TMROLE
         return RPC_DISPATCH_THREAD_PREFIX + "_" + NettyPoolKey.TransactionRole.TMROLE.name();
     }
 
@@ -442,6 +444,7 @@ public class NettyClientConfig extends NettyBaseConfig {
      * @return the rm dispatch thread prefix
      */
     public String getRmDispatchThreadPrefix() {
+        // rpcDispatch_RMROLE
         return RPC_DISPATCH_THREAD_PREFIX + "_" + NettyPoolKey.TransactionRole.RMROLE.name();
     }
 }

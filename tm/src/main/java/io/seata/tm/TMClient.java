@@ -19,6 +19,7 @@ import io.seata.core.rpc.netty.TmRpcClient;
 
 /**
  * The type Tm client.
+ * TM客户端
  *
  * @author jimin.jm @alibaba-inc.com
  */

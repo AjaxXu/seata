@@ -17,6 +17,7 @@ package io.seata.core.protocol;
 
 /**
  * The type Message codec type.
+ * 消息编码类型
  *
  * @author zhangsen
  * @date 2019 /5/6

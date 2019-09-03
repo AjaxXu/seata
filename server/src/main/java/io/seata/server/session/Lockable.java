@@ -19,6 +19,7 @@ import io.seata.core.exception.TransactionException;
 
 /**
  * The interface Lockable.
+ * 锁接口
  *
  * @author sharajava
  */

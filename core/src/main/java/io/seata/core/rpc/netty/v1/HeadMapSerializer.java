@@ -24,6 +24,7 @@ import java.util.Map;
 
 /**
  * Common serializer of map (this generally refers to header).
+ * map的通用序列化器
  *
  * @author Geng Zhang
  * @since 0.7.0

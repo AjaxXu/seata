@@ -17,6 +17,7 @@ package io.seata.core.protocol;
 
 /**
  * The enum Result code.
+ * 结果编码
  *
  * @author sharajava
  */

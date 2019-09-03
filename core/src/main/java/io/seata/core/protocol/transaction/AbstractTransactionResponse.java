@@ -21,6 +21,7 @@ import io.seata.core.protocol.AbstractResultMessage;
 
 /**
  * The type Abstract transaction response.
+ * 抽象事务响应
  *
  * @author sharajava
  */

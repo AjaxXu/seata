@@ -19,6 +19,7 @@ import io.seata.tm.api.transaction.TransactionInfo;
 
 /**
  * Callback for executing business logic in a global transaction.
+ * 全局事务中执行业务逻辑的回调
  *
  * @author sharajava
  */
@@ -26,6 +27,7 @@ public interface TransactionalExecutor {
 
     /**
      * Execute the business logic here.
+     * 执行业务逻辑
      *
      * @return What the business logic returns.
      * @throws Throwable Any throwable during executing.

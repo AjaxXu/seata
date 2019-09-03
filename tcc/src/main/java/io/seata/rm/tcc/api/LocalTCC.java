@@ -23,6 +23,7 @@ import java.lang.annotation.Target;
 
 /**
  * Local TCC bean annotation, add on the TCC interface
+ * 本地tcc注解
  *
  * @author zhangsen
  */

@@ -31,6 +31,7 @@ import io.seata.core.model.ResourceManager;
 
 /**
  * default resource manager, adapt all resource managers
+ * 默认的资源管理器，适配所有资源管理器
  *
  * @author zhangsen
  */
@@ -67,6 +68,7 @@ public class DefaultResourceManager implements ResourceManager {
 
     protected void initResourceManagers() {
         //init all resource managers
+        // 初始化所有的resource manager(定义在META-INF/services/ 及 "META-INF/seata/")
         List<ResourceManager> allResourceManagers = EnhancedServiceLoader.loadAll(ResourceManager.class);
         if (CollectionUtils.isNotEmpty(allResourceManagers)) {
             for (ResourceManager rm : allResourceManagers) {
@@ -79,6 +81,7 @@ public class DefaultResourceManager implements ResourceManager {
     public BranchStatus branchCommit(BranchType branchType, String xid, long branchId,
                                      String resourceId, String applicationData)
         throws TransactionException {
+        // 由BranchType对应的resource manager 提交
         return getResourceManager(branchType).branchCommit(branchType, xid, branchId, resourceId, applicationData);
     }
 
@@ -134,8 +137,8 @@ public class DefaultResourceManager implements ResourceManager {
     /**
      * get ResourceManager by Resource Type
      *
-     * @param branchType
-     * @return
+     * @param branchType 资源类型
+     * @return 对应的rm
      */
     public ResourceManager getResourceManager(BranchType branchType) {
         ResourceManager rm = resourceManagers.get(branchType);

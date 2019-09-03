@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The type Abstract session manager.
+ * session管理器的抽象类
  */
 public abstract class AbstractSessionManager implements SessionManager, SessionLifecycleListener {
 

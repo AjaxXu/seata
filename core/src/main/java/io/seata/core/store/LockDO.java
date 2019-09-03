@@ -19,6 +19,7 @@ import io.seata.common.util.StringUtils;
 
 /**
  * The type Lock do.
+ * Lock do类
  *
  * @author zhangsen
  * @date 2019 /4/25

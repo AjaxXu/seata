@@ -20,6 +20,7 @@ import io.seata.core.rpc.RpcContext;
 
 /**
  * The type Branch rollback request.
+ * 分支回滚请求
  *
  * @author jimin.jm @alibaba-inc.com
  */

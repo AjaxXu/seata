@@ -77,6 +77,7 @@ import io.seata.core.protocol.transaction.UndoLogDeleteRequest;
 
 /**
  * The type Message codec factory.
+ * 消息编码工厂
  *
  * @author zhangsen
  */

@@ -17,6 +17,7 @@ package io.seata.config;
 
 /**
  * The enum Config type.
+ * 配置类型
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2019 /2/1

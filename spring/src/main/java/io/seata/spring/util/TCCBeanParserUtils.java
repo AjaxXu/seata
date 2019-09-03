@@ -25,6 +25,7 @@ import org.springframework.context.ApplicationContext;
 
 /**
  * parser TCC bean
+ * 解析TCC bean
  *
  * @author zhangsen
  * @data 2019 /3/18
@@ -133,6 +134,7 @@ public class TCCBeanParserUtils {
 
     /**
      * get remoting bean info: sofa:service、sofa:reference、dubbo:reference、dubbo:service
+     * 获得远程bean信息
      *
      * @param bean     the bean
      * @param beanName the bean name

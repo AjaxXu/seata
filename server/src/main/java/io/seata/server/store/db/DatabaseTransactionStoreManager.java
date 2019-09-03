@@ -188,14 +188,14 @@ public class DatabaseTransactionStoreManager extends AbstractTransactionStoreMan
         if (StringUtils.isNotBlank(sessionCondition.getXid())) {
             GlobalSession globalSession = readSession(sessionCondition.getXid());
             if (globalSession != null) {
-                List<GlobalSession> globalSessions = new ArrayList();
+                List<GlobalSession> globalSessions = new ArrayList<>();
                 globalSessions.add(globalSession);
                 return globalSessions;
             }
         } else if (sessionCondition.getTransactionId() != null) {
             GlobalSession globalSession = readSession(sessionCondition.getTransactionId());
             if (globalSession != null) {
-                List<GlobalSession> globalSessions = new ArrayList();
+                List<GlobalSession> globalSessions = new ArrayList<>();
                 globalSessions.add(globalSession);
                 return globalSessions;
             }
@@ -246,7 +246,7 @@ public class DatabaseTransactionStoreManager extends AbstractTransactionStoreMan
     }
 
     private GlobalTransactionDO convertGlobalTransactionDO(SessionStorable session) {
-        if (session == null || !(session instanceof GlobalSession)) {
+        if (!(session instanceof GlobalSession)) {
             throw new IllegalArgumentException(
                 "the parameter of SessionStorable is not available, SessionStorable:" + StringUtils.toString(session));
         }
@@ -266,7 +266,7 @@ public class DatabaseTransactionStoreManager extends AbstractTransactionStoreMan
     }
 
     private BranchTransactionDO convertBranchTransactionDO(SessionStorable session) {
-        if (session == null || !(session instanceof BranchSession)) {
+        if (!(session instanceof BranchSession)) {
             throw new IllegalArgumentException(
                 "the parameter of SessionStorable is not available, SessionStorable:" + StringUtils.toString(session));
         }

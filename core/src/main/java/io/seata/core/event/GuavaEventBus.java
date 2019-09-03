@@ -17,6 +17,7 @@ package io.seata.core.event;
 
 /**
  * Default event bus implement with Guava EventBus.
+ * 默认的事件总线实现类，使用Guava EventBus.
  *
  * @author zhengyangyong
  */

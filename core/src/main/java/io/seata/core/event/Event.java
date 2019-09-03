@@ -17,6 +17,7 @@ package io.seata.core.event;
 
 /**
  * The base interface for seata event.
+ * 事件
  *
  * @author zhengyangyong
  */

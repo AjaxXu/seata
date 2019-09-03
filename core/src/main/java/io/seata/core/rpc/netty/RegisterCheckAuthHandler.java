@@ -20,6 +20,7 @@ import io.seata.core.protocol.RegisterTMRequest;
 
 /**
  * The interface Register check auth handler.
+ * 注册时检查权限的处理器
  *
  * @author jimin.jm @alibaba-inc.com
  * @date 2018 /12/7

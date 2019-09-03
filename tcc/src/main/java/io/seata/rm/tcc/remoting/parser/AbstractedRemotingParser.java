@@ -20,6 +20,7 @@ import io.seata.rm.tcc.remoting.RemotingParser;
 
 /**
  * The type Abstracted remoting parser.
+ * 远程解析的抽象类
  *
  * @author zhangsen
  */

@@ -23,6 +23,7 @@ import java.lang.annotation.Target;
 
 /**
  * TCC annotation, Define a TCC interface，which added on the try method
+ * TCC注解，定义一个TCC接口，加在try方法上面
  *
  * @author zhangsen
  */
@@ -33,6 +34,7 @@ public @interface TwoPhaseBusinessAction {
 
     /**
      * TCC bean name, must be unique
+     * TCC bean名称，必须唯一
      *
      * @return the string
      */

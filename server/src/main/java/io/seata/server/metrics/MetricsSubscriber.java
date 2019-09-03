@@ -27,6 +27,7 @@ import io.seata.metrics.registry.Registry;
 
 /**
  * Event subscriber for metrics
+ * 指标事件订阅者
  *
  * @author zhengyangyong
  */
@@ -48,6 +49,7 @@ public class MetricsSubscriber {
         consumers.put(GlobalStatus.TimeoutRollbackFailed, this::processGlobalStatusTimeoutRollbackFailed);
     }
 
+    // 处理全局事务开始事件
     private void processGlobalStatusBegin(GlobalTransactionEvent event) {
         registry.getCounter(MeterIdConstants.COUNTER_ACTIVE).increase(1);
     }
