@@ -25,6 +25,7 @@ import java.util.List;
 
 /**
  * The type Table records.
+ * 表记录
  *
  * @author sharajava
  */

@@ -19,6 +19,7 @@ import java.util.List;
 
 /**
  * The interface Sql insert recognizer.
+ * Sql 插入 recognizer
  *
  * @author sharajava
  */

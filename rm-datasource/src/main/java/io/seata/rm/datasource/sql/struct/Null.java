@@ -17,6 +17,7 @@ package io.seata.rm.datasource.sql.struct;
 
 /**
  * The type Null.
+ * Null 类型
  *
  * @author sharajava
  */

@@ -17,6 +17,7 @@ package io.seata.rm.datasource.sql;
 
 /**
  * The enum Sql type.
+ * Sql 类型
  *
  * @author sharajava
  */

@@ -34,6 +34,7 @@ import org.apache.commons.lang.StringUtils;
 
 /**
  * The type Update executor.
+ * 更新执行器
  *
  * @author sharajava
  *

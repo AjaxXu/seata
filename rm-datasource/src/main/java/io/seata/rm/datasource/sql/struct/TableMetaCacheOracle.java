@@ -34,12 +34,13 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The type Table meta cache.
+ * 表元数据缓存
  */
 public class TableMetaCacheOracle {
 
     private static final long CACHE_SIZE = 100000;
 
-    private static final long EXPIRE_TIME = 900 * 1000;
+    private static final long EXPIRE_TIME = 900 * 1000; // 15m
 
     private static final Cache<String, TableMeta> TABLE_META_CACHE = Caffeine.newBuilder().maximumSize(CACHE_SIZE)
         .expireAfterWrite(EXPIRE_TIME, TimeUnit.MILLISECONDS).softValues().build();
@@ -83,6 +84,7 @@ public class TableMetaCacheOracle {
         return tmeta;
     }
 
+    // 根据真正的DataSource和表名称获取表的元数据
     private static TableMeta fetchSchema(DataSource dataSource, String tableName) throws SQLException {
         return fetchSchemeInDefaultWay(dataSource, tableName);
     }
@@ -93,6 +95,7 @@ public class TableMetaCacheOracle {
         try {
             conn = dataSource.getConnection();
             stmt = conn.createStatement();
+            // 数据库元数据
             DatabaseMetaData dbmd = conn.getMetaData();
             return resultSetMetaToSchema(dbmd, tableName);
         } catch (Exception e) {
@@ -115,7 +118,7 @@ public class TableMetaCacheOracle {
         //Need to convert uppercase, oracle table name needs to be capitalized in order to get metadata
         tableName = tableName.toUpperCase();
         TableMeta tm = new TableMeta();
-        tm.setTableName(tableName);
+        tm.setTableName(tableName); // 表名称是大写的
         String[] schemaTable = tableName.split("\\.");
         String schemaName = schemaTable.length > 1 ? schemaTable[0] : dbmd.getUserName();
         tableName = schemaTable.length > 1 ? schemaTable[1] : tableName;

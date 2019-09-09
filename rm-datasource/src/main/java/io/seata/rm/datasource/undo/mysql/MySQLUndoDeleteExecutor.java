@@ -31,6 +31,7 @@ import io.seata.rm.datasource.undo.SQLUndoLog;
 
 /**
  * The type My sql undo delete executor.
+ * MySQL undo 删除执行器
  *
  * @author sharajava
  */

@@ -28,6 +28,7 @@ import io.seata.common.util.CollectionUtils;
 
 /**
  * The type Table meta.
+ * 表元数据
  *
  * @author sharajava
  */
@@ -93,14 +94,14 @@ public class TableMeta {
 
     /**
      * Gets auto increase column.
+     * 获取自增列
      *
      * @return the auto increase column
      */
     public ColumnMeta getAutoIncreaseColumn() {
         // TODO: how about auto increment but not pk?
-        for (Entry<String, ColumnMeta> entry : allColumns.entrySet()) {
-            ColumnMeta col = entry.getValue();
-            if ("YES".equalsIgnoreCase(col.getIsAutoincrement())) {
+        for (ColumnMeta col : allColumns.values()) {
+            if (col.isAutoincrement()) {
                 return col;
             }
         }

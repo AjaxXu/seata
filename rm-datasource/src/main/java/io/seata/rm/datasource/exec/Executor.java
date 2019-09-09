@@ -17,6 +17,7 @@ package io.seata.rm.datasource.exec;
 
 /**
  * The interface Executor.
+ * 执行器接口
  *
  * @author sharajava
  *

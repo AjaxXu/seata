@@ -17,6 +17,7 @@ package io.seata.common.exception;
 
 /**
  * The type Not support yet exception.
+ * 未实现异常
  *
  * @author jimin.jm @alibaba-inc.com
  */

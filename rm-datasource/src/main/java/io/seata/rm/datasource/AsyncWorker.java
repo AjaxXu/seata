@@ -49,6 +49,7 @@ import static io.seata.core.constants.ConfigurationKeys.CLIENT_ASYNC_COMMIT_BUFF
 
 /**
  * The type Async worker.
+ * 异步worker
  *
  * @author sharajava
  */
@@ -102,6 +103,7 @@ public class AsyncWorker implements ResourceManagerInbound {
         BranchType branchType;
     }
 
+    // buffer 大小，默认10000
     private static int ASYNC_COMMIT_BUFFER_LIMIT = ConfigurationFactory.getInstance().getInt(
             CLIENT_ASYNC_COMMIT_BUFFER_LIMIT, 10000);
 
@@ -112,6 +114,7 @@ public class AsyncWorker implements ResourceManagerInbound {
 
     @Override
     public BranchStatus branchCommit(BranchType branchType, String xid, long branchId, String resourceId, String applicationData) throws TransactionException {
+        // 封装成Phase2Context放到队列中
         if (!ASYNC_COMMIT_BUFFER.offer(new Phase2Context(branchType, xid, branchId, resourceId, applicationData))) {
             LOGGER.warn("Async commit buffer is FULL. Rejected branch [" + branchId + "/" + xid + "] will be handled by housekeeping later.");
         }
@@ -125,6 +128,7 @@ public class AsyncWorker implements ResourceManagerInbound {
         LOGGER.info("Async Commit Buffer Limit: " + ASYNC_COMMIT_BUFFER_LIMIT);
         timerExecutor = new ScheduledThreadPoolExecutor(1,
                 new NamedThreadFactory("AsyncWorker", 1, true));
+        // 定时执行分支提交
         timerExecutor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
@@ -137,7 +141,7 @@ public class AsyncWorker implements ResourceManagerInbound {
 
                 }
             }
-        }, 10, 1000 * 1, TimeUnit.MILLISECONDS);
+        }, 10, 1000, TimeUnit.MILLISECONDS);
     }
 
     private void doBranchCommits() {
@@ -148,13 +152,8 @@ public class AsyncWorker implements ResourceManagerInbound {
         Map<String, List<Phase2Context>> mappedContexts = new HashMap<>(DEFAULT_RESOURCE_SIZE);
         while (!ASYNC_COMMIT_BUFFER.isEmpty()) {
             Phase2Context commitContext = ASYNC_COMMIT_BUFFER.poll();
-            List<Phase2Context> contextsGroupedByResourceId = mappedContexts.get(commitContext.resourceId);
-            if (contextsGroupedByResourceId == null) {
-                contextsGroupedByResourceId = new ArrayList<>();
-                mappedContexts.put(commitContext.resourceId, contextsGroupedByResourceId);
-            }
+            List<Phase2Context> contextsGroupedByResourceId = mappedContexts.computeIfAbsent(commitContext.resourceId, k -> new ArrayList<>());
             contextsGroupedByResourceId.add(commitContext);
-
         }
 
         for (Map.Entry<String, List<Phase2Context>> entry : mappedContexts.entrySet()) {
@@ -163,7 +162,7 @@ public class AsyncWorker implements ResourceManagerInbound {
             try {
                 try {
                     DataSourceManager resourceManager = (DataSourceManager) DefaultResourceManager.get().getResourceManager(BranchType.AT);
-                    dataSourceProxy = resourceManager.get(entry.getKey());
+                    dataSourceProxy = resourceManager.get(entry.getKey()); // 根据资源Id获取DataSourceProxy
                     if (dataSourceProxy == null) {
                         throw new ShouldNeverHappenException("Failed to find resource on " + entry.getKey());
                     }
@@ -178,7 +177,8 @@ public class AsyncWorker implements ResourceManagerInbound {
                 for (Phase2Context commitContext : contextsGroupedByResourceId) {
                     xids.add(commitContext.xid);
                     branchIds.add(commitContext.branchId);
-                    int maxSize = xids.size() > branchIds.size() ? xids.size() : branchIds.size();
+                    int maxSize = Math.max(xids.size(), branchIds.size());
+                    // 达到删除的大小，则进行删除
                     if(maxSize == UNDOLOG_DELETE_LIMIT_SIZE){
                         try {
                             if(JdbcConstants.ORACLE.equalsIgnoreCase(dataSourceProxy.getDbType())) {

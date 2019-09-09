@@ -30,6 +30,7 @@ import io.seata.rm.datasource.sql.struct.TableRecords;
 
 /**
  * The type Select for update executor.
+ * Select for update 执行器
  *
  * @author sharajava
  *

@@ -24,6 +24,7 @@ import io.seata.common.exception.ShouldNeverHappenException;
 
 /**
  * The type Blob utils.
+ * Blob辅助类
  *
  * @author jimin.jm @alibaba-inc.com
  * @author Geng Zhang

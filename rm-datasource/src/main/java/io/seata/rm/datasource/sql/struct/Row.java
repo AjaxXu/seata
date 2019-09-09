@@ -22,6 +22,7 @@ import io.seata.common.exception.NotSupportYetException;
 
 /**
  * The type Row.
+ * 行
  *
  * @author sharajava
  */

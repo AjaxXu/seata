@@ -42,6 +42,7 @@ import io.seata.rm.datasource.undo.SQLUndoLog;
 
 /**
  * The type Base transactional executor.
+ * 基础事务执行器
  *
  * @author sharajava
  *
@@ -149,6 +150,7 @@ public abstract class BaseTransactionalExecutor<T, S extends Statement> implemen
 
     /**
      * Gets column name in sql.
+     * 获取sql中的列名
      *
      * @param columnName the column name
      * @return the column name in sql
@@ -160,6 +162,7 @@ public abstract class BaseTransactionalExecutor<T, S extends Statement> implemen
 
     /**
      * Gets from table in sql.
+     * 获取from 表名
      *
      * @return the from table in sql
      */
@@ -198,6 +201,7 @@ public abstract class BaseTransactionalExecutor<T, S extends Statement> implemen
 
     /**
      * prepare undo log.
+     * 准备undo log
      *
      * @param beforeImage the before image
      * @param afterImage  the after image
@@ -244,6 +248,7 @@ public abstract class BaseTransactionalExecutor<T, S extends Statement> implemen
 
     /**
      * build a SQLUndoLog
+     * 构建SQLUndoLog
      *
      * @param beforeImage the before image
      * @param afterImage  the after image
@@ -264,6 +269,7 @@ public abstract class BaseTransactionalExecutor<T, S extends Statement> implemen
 
     /**
      * build a BeforeImage
+     * 构建BeforeImage
      *
      * @param tableMeta         the tableMeta
      * @param selectSQL         the selectSQL
@@ -316,6 +322,7 @@ public abstract class BaseTransactionalExecutor<T, S extends Statement> implemen
 
     /**
      * build TableRecords
+     * 构建afterImage
      *
      * @param pkValues the pkValues
      * @return return TableRecords;

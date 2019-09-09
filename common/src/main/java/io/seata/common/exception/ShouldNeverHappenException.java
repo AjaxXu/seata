@@ -17,6 +17,7 @@ package io.seata.common.exception;
 
 /**
  * The type Should never happen exception.
+ * 不应该发生的异常
  *
  * @author jimin.jm @alibaba-inc.com
  */

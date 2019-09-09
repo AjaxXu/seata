@@ -23,6 +23,7 @@ import org.apache.commons.lang.ArrayUtils;
 
 /**
  * The type Index meta.
+ * 索引元数据
  *
  * @author sharajava
  */

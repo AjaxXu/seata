@@ -47,6 +47,7 @@ import static io.seata.core.exception.TransactionExceptionCode.BranchRollbackFai
 
 /**
  * The type Undo log manager.
+ * undo log管理器
  * @author ccg
  * @date 2019/3/25
  */
@@ -55,11 +56,13 @@ public final class UndoLogManagerOracle {
     private enum State {
         /**
          * This state can be properly rolled back by services
+         * 能被service正确回滚
          */
         Normal(0),
         /**
          * This state prevents the branch transaction from inserting undo_log after the global transaction is rolled
          * back.
+         * 防止全局事务回滚后，分支事务插入undo_log
          */
         GlobalFinished(1);
 
@@ -75,11 +78,12 @@ public final class UndoLogManagerOracle {
     }
     private static final Logger LOGGER = LoggerFactory.getLogger(UndoLogManagerOracle.class);
 
+    // undo_log
     private static final String UNDO_LOG_TABLE_NAME = ConfigurationFactory.getInstance()
             .getConfig(ConfigurationKeys.TRANSACTION_UNDO_LOG_TABLE, ConfigurationKeys.TRANSACTION_UNDO_LOG_DEFAULT_TABLE);
     private static final String INSERT_UNDO_LOG_SQL = "INSERT INTO " + UNDO_LOG_TABLE_NAME + "\n" +
-        "\t(id,branch_id, xid,context, rollback_info, log_status, log_created, log_modified)\n" +
-        "VALUES (UNDO_LOG_SEQ.nextval,?, ?,?, ?, ?, sysdate, sysdate)";
+        "\t(id, branch_id, xid, context, rollback_info, log_status, log_created, log_modified)\n" +
+        "VALUES (UNDO_LOG_SEQ.nextval, ?, ?, ?, ?, ?, sysdate, sysdate)";
 
     private static final String DELETE_UNDO_LOG_SQL = "DELETE FROM " + UNDO_LOG_TABLE_NAME + "\n" +
         "\tWHERE branch_id = ? AND xid = ?";
@@ -95,6 +99,7 @@ public final class UndoLogManagerOracle {
 
     /**
      * Flush undo logs.
+     * 刷新undo log到数据库
      *
      * @param cp the cp
      * @throws SQLException the sql exception
@@ -118,7 +123,7 @@ public final class UndoLogManagerOracle {
             LOGGER.debug("Flushing UNDO LOG: {}",new String(undoLogContent, Constants.DEFAULT_CHARSET));
         }
 
-        insertUndoLogWithNormal(xid, branchID,buildContext(parser.getName()), undoLogContent, cp.getTargetConnection());
+        insertUndoLogWithNormal(xid, branchID, buildContext(parser.getName()), undoLogContent, cp.getTargetConnection());
     }
 
     private static void assertDbSupport(String dbType) {
@@ -129,6 +134,7 @@ public final class UndoLogManagerOracle {
 
     /**
      * Undo.
+     * undo 操作
      *
      * @param dataSourceProxy the data source proxy
      * @param xid             the xid
@@ -150,6 +156,7 @@ public final class UndoLogManagerOracle {
                 conn.setAutoCommit(false);
 
                 // Find UNDO LOG
+                // 找到undo log
                 selectPST = conn.prepareStatement(SELECT_UNDO_LOG_SQL);
                 selectPST.setLong(1, branchId);
                 selectPST.setString(2, xid);
@@ -171,9 +178,12 @@ public final class UndoLogManagerOracle {
 
                     String contextString = rs.getString("context");
                     Map<String, String> context = parseContext(contextString);
+
+                    // 回滚内容
                     Blob b = rs.getBlob("rollback_info");
                     byte[] rollbackInfo = BlobUtils.blob2Bytes(b);
 
+                    // 获取序列化器
                     String serializer = context == null ? null : context.get(UndoLogConstants.SERIALIZER_KEY);
                     UndoLogParser parser = serializer == null ? UndoLogParserFactory.getInstance() :
                         UndoLogParserFactory.getInstance(serializer);
@@ -185,7 +195,7 @@ public final class UndoLogManagerOracle {
 
                         for (SQLUndoLog sqlUndoLog : branchUndoLog.getSqlUndoLogs()) {
                             TableMeta tableMeta = TableMetaCacheOracle.getTableMeta(dataSourceProxy, sqlUndoLog.getTableName());
-                            sqlUndoLog.setTableMeta(tableMeta);
+                            sqlUndoLog.setTableMeta(tableMeta); // TableRecords的tableMeta属性是transient
                             AbstractUndoExecutor undoExecutor = UndoExecutorFactory.getUndoExecutor(dataSourceProxy.getDbType(),
                                     sqlUndoLog);
                             undoExecutor.executeOn(conn);
@@ -203,8 +213,13 @@ public final class UndoLogManagerOracle {
                 // To ensure data consistency, we can insert an undo_log with GlobalFinished state
                 // to prevent the local transaction of the first phase of other programs from being correctly submitted.
                 // See https://github.com/seata/seata/issues/489
+                // 如果undo_log存在，说明分支事务已经完成第一阶段，能直接回滚并且删除undo_log
+                // 否则说明分支事务中存在异常导致undo_log没有写入数据库。
+                // 比如，业务处理超时，全局事务指示回滚。为了保证数据一致性，我们使用GlobalFinished状态插入undo_log，防止一阶段的本地事务
+                // 被正确提交
 
                 if (exists) {
+                    // 删除undo_log
                     deleteUndoLog(xid, branchId, conn);
                     conn.commit();
                     if (LOGGER.isInfoEnabled()) {
@@ -212,6 +227,7 @@ public final class UndoLogManagerOracle {
                                 xid, branchId, State.GlobalFinished.name());
                     }
                 } else {
+                    // undo_log不存在
                     insertUndoLogWithGlobalFinished(xid, branchId, UndoLogParserFactory.getInstance(), conn);
                     conn.commit();
                     if (LOGGER.isInfoEnabled()) {
@@ -258,6 +274,7 @@ public final class UndoLogManagerOracle {
 
     /**
      * batch Delete undo log.
+     * 批量删除undo 日志
      *
      * @param xids
      * @param branchIds
@@ -321,6 +338,7 @@ public final class UndoLogManagerOracle {
 
     /**
      * Delete undo log.
+     * 删除undo_log
      *
      * @param xid the xid
      * @param branchId the branch id
@@ -348,17 +366,21 @@ public final class UndoLogManagerOracle {
     public static String getCurrentSerializer() {
         return SERIALIZER_LOCAL.get();
     }
+
+    // 插入Normal状态的undo log
     private static void insertUndoLogWithNormal(String xid, long branchID, String rollbackCtx,
                                                 byte[] undoLogContent, Connection conn) throws SQLException {
-        insertUndoLog(xid, branchID,rollbackCtx, undoLogContent, State.Normal, conn);
+        insertUndoLog(xid, branchID, rollbackCtx, undoLogContent, State.Normal, conn);
     }
 
+    // 插入GlobalFinished状态的undo log
     private static void insertUndoLogWithGlobalFinished(String xid, long branchID, UndoLogParser parser,
         Connection conn) throws SQLException {
         insertUndoLog(xid, branchID, buildContext(parser.getName()),
             parser.getDefaultContent(), State.GlobalFinished, conn);
     }
 
+    // 插入undo log
     private static void insertUndoLog(String xid, long branchID, String rollbackCtx,
         byte[] undoLogContent, State state, Connection conn) throws SQLException {
         PreparedStatement pst = null;

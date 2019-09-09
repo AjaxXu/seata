@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The type Insert executor.
+ * 插入执行器
  *
  * @param <T> the type parameter
  * @param <S> the type parameter

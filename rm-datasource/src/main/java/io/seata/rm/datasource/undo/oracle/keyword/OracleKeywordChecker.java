@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 /**
  * The type oracle sql keyword checker.
+ * oracle sql关键字检查
  *
  * @author ccg
  * @date 2019/3/25 oracle keyword checker
@@ -520,7 +521,7 @@ public class OracleKeywordChecker implements KeywordChecker {
 
     @Override
     public String checkAndReplace(String fieldOrTableName) {
-        return check(fieldOrTableName)? fieldOrTableName :fieldOrTableName;
+        return check(fieldOrTableName) ? fieldOrTableName : fieldOrTableName;
 //        return check(fieldOrTableName)?"`" + fieldOrTableName + "`":fieldOrTableName;
     }
 }

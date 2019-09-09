@@ -33,6 +33,7 @@ import org.apache.commons.lang.StringUtils;
 
 /**
  * The type Delete executor.
+ * 删除执行器
  *
  * @author sharajava
  *

@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The type Connection proxy.
+ * 连接代理
  *
  * @author sharajava
  */
@@ -48,6 +49,7 @@ public class ConnectionProxy extends AbstractConnectionProxy {
 
     private static final int DEFAULT_REPORT_RETRY_COUNT = 5;
 
+    // 报告重试次数
     private static final int REPORT_RETRY_COUNT = ConfigurationFactory.getInstance().getInt(
         ConfigurationKeys.CLIENT_REPORT_RETRY_COUNT, DEFAULT_REPORT_RETRY_COUNT);
 
@@ -97,6 +99,7 @@ public class ConnectionProxy extends AbstractConnectionProxy {
 
     /**
      * Check lock.
+     * 检查lockKeys是否被锁住
      *
      * @param lockKeys the lockKeys
      * @throws SQLException the sql exception
@@ -115,7 +118,12 @@ public class ConnectionProxy extends AbstractConnectionProxy {
     }
 
     /**
+<<<<<<< HEAD
      * Lock query.
+=======
+     * Register.
+     * 分支注册
+>>>>>>> 0b10a97f1627930877cb4733f431e54906e9450c
      *
      * @param lockKeys the lock keys
      * @throws SQLException the sql exception
@@ -170,8 +178,10 @@ public class ConnectionProxy extends AbstractConnectionProxy {
     @Override
     public void commit() throws SQLException {
         if (context.inGlobalTransaction()) {
+            // 在全局事务中，注册分支，等TM发起commit
             processGlobalTransactionCommit();
         } else if (context.isGlobalLockRequire()) {
+            // 本地commit with 全局锁
             processLocalCommitWithGlobalLocks();
         } else {
             targetConnection.commit();
@@ -197,6 +207,7 @@ public class ConnectionProxy extends AbstractConnectionProxy {
         }
 
         try {
+            // 注册完分支后，如果有undo 日志，则把undo 日志写入数据库
             if (context.hasUndoLog()) {
                 if (JdbcConstants.ORACLE.equalsIgnoreCase(this.getDbType())) {
                     UndoLogManagerOracle.flushUndoLogs(this);
@@ -240,6 +251,7 @@ public class ConnectionProxy extends AbstractConnectionProxy {
         targetConnection.setAutoCommit(autoCommit);
     }
 
+    // 报告分支状态
     private void report(boolean commitDone) throws SQLException {
         int retry = REPORT_RETRY_COUNT;
         while (retry > 0) {

@@ -35,6 +35,7 @@ import java.util.Objects;
 
 /**
  * The type Data compare utils.
+ * 数据对比工具类
  *
  * @author Geng Zhang
  */
@@ -42,6 +43,7 @@ public class DataCompareUtils {
 
     /**
      * Is field equals.
+     * 判断字段是否相等
      *
      * @param f0 the f0
      * @param f1 the f1
@@ -81,6 +83,7 @@ public class DataCompareUtils {
         }
     }
 
+    // 转换类型
     private static void convertType(Field f0, Field f1) {
         int f0Type = f0.getType();
         int f1Type = f1.getType();
@@ -100,6 +103,7 @@ public class DataCompareUtils {
 
     /**
      * Is image equals.
+     * 判断TableRecords是否相等
      *
      * @param beforeImage the before image
      * @param afterImage  the after image
@@ -128,6 +132,7 @@ public class DataCompareUtils {
 
     /**
      * Is rows equals.
+     * 判断行是否相等
      *
      * @param tableMetaData the table meta data
      * @param oldRows       the old rows
@@ -141,6 +146,7 @@ public class DataCompareUtils {
         return compareRows(tableMetaData, oldRows, newRows);
     }
 
+    // 对比行
     private static Result<Boolean> compareRows(TableMeta tableMetaData, List<Row> oldRows, List<Row> newRows) {
         // old row to map
         Map<String, Map<String, Field>> oldRowsMap = rowListToMap(oldRows, tableMetaData.getPkName());
