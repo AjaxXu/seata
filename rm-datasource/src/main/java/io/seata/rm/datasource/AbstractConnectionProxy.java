@@ -38,6 +38,7 @@ import java.util.concurrent.Executor;
 
 /**
  * The type Abstract connection proxy.
+ * 连接代理的抽象类
  *
  * @author sharajava
  */
@@ -50,6 +51,7 @@ public abstract class AbstractConnectionProxy implements Connection {
 
     /**
      * The Target connection.
+     * 实际的连接
      */
     protected Connection targetConnection;
 

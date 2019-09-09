@@ -32,6 +32,7 @@ import io.seata.rm.datasource.sql.SQLType;
 
 /**
  * The type My sql insert recognizer.
+ *  MySql类型的插入 recognizer
  *
  * @author sharajava
  */
@@ -62,7 +63,7 @@ public class MySQLInsertRecognizer extends BaseRecognizer implements SQLInsertRe
 
     @Override
     public String getTableName() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         MySqlOutputVisitor visitor = new MySqlOutputVisitor(sb) {
 
             @Override

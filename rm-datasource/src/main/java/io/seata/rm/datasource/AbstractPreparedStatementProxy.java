@@ -43,6 +43,7 @@ import io.seata.rm.datasource.sql.struct.Null;
 
 /**
  * The type Abstract prepared statement proxy.
+ * prepared statement代理的抽象类
  *
  * @author sharajava
  */

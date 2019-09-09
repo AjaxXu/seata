@@ -17,6 +17,7 @@ package io.seata.rm.datasource.undo;
 
 /**
  * The interface Undo log parser.
+ * Undo log 解析器
  *
  * @author sharajava
  * @author Geng Zhang

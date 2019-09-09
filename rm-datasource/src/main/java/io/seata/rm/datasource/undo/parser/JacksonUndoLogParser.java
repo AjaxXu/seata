@@ -44,6 +44,7 @@ import java.sql.Timestamp;
 
 /**
  * The type Json based undo log parser.
+ * 基于JSON的undo log 解析器
  *
  * @author jsbxyyx
  */
@@ -90,8 +91,7 @@ public class JacksonUndoLogParser implements UndoLogParser {
     @Override
     public byte[] encode(BranchUndoLog branchUndoLog) {
         try {
-            byte[] bytes = MAPPER.writeValueAsBytes(branchUndoLog);
-            return bytes;
+            return MAPPER.writeValueAsBytes(branchUndoLog);
         } catch (JsonProcessingException e) {
             LOGGER.error("json encode exception, {}", e.getMessage(), e);
             throw new RuntimeException(e);
@@ -101,8 +101,7 @@ public class JacksonUndoLogParser implements UndoLogParser {
     @Override
     public BranchUndoLog decode(byte[] bytes) {
         try {
-            BranchUndoLog branchUndoLog = MAPPER.readValue(bytes, BranchUndoLog.class);
-            return branchUndoLog;
+            return MAPPER.readValue(bytes, BranchUndoLog.class);
         } catch (IOException e) {
             LOGGER.error("json decode exception, {}", e.getMessage(), e);
             throw new RuntimeException(e);

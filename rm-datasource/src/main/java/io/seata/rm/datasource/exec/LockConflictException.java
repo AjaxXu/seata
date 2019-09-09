@@ -19,6 +19,7 @@ import java.sql.SQLException;
 
 /**
  * The type Lock conflict exception.
+ * 锁冲突异常
  *
  * @author sharajava
  */

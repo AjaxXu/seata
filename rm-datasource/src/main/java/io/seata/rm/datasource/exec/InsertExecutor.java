@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The type Insert executor.
+ * 插入执行器
  *
  * @param <T> the type parameter
  * @param <S> the type parameter
@@ -95,9 +96,9 @@ public class InsertExecutor<T, S extends Statement> extends AbstractDMLBaseExecu
         List<Object> pkValues = null;
         if (statementProxy instanceof PreparedStatementProxy) {
             PreparedStatementProxy preparedStatementProxy = (PreparedStatementProxy) statementProxy;
-            ArrayList<Object>[] paramters = preparedStatementProxy.getParameters();
-            int insertColumnsSize = insertColumns.size();
-            int cycleNums = paramters.length / insertColumnsSize;
+            ArrayList<Object>[] paramters = preparedStatementProxy.getParameters(); // 所有参数
+            int insertColumnsSize = insertColumns.size(); // 插入列的数量
+            int cycleNums = paramters.length / insertColumnsSize; // 插入多少行
             List<Integer> pkIndexs = new ArrayList<>(cycleNums);
             int firstPkIndex = 0;
             for (int paramIdx = 0; paramIdx < insertColumns.size(); paramIdx++) {

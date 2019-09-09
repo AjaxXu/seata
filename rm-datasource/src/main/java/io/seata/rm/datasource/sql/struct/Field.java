@@ -17,6 +17,7 @@ package io.seata.rm.datasource.sql.struct;
 
 /**
  * Field
+ * 字段
  *
  * @author sharajava
  */

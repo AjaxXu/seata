@@ -19,6 +19,7 @@ import java.util.List;
 
 /**
  * The interface Sql update recognizer.
+ * Sql更新识别器
  *
  * @author sharajava
  */

@@ -38,6 +38,7 @@ import java.util.List;
 
 /**
  * The type Abstract undo executor.
+ * undo执行器抽象类
  *
  * @author sharajava
  * @author Geng Zhang
@@ -58,6 +59,7 @@ public abstract class AbstractUndoExecutor {
 
     /**
      * Switch of undo data validation
+     * 是否支持undo 数据校验
      */
     public static final boolean IS_UNDO_DATA_VALIDATION_ENABLE = ConfigurationFactory.getInstance()
             .getBoolean(ConfigurationKeys.TRANSACTION_UNDO_DATA_VALIDATION, true);
@@ -69,6 +71,7 @@ public abstract class AbstractUndoExecutor {
 
     /**
      * Build undo sql string.
+     * 构建undo sql语句
      *
      * @return the string
      */
@@ -94,6 +97,7 @@ public abstract class AbstractUndoExecutor {
 
     /**
      * Execute on.
+     * 执行undo
      *
      * @param conn the conn
      * @throws SQLException the sql exception
@@ -112,8 +116,8 @@ public abstract class AbstractUndoExecutor {
             TableRecords undoRows = getUndoRows();
 
             for (Row undoRow : undoRows.getRows()) {
-                ArrayList<Field> undoValues = new ArrayList<>();
-                Field pkValue = null;
+                ArrayList<Field> undoValues = new ArrayList<>(); // 非主键值
+                Field pkValue = null; // 主键值
                 for (Field field : undoRow.getFields()) {
                     if (field.getKeyType() == KeyType.PrimaryKey) {
                         pkValue = field;
@@ -140,6 +144,7 @@ public abstract class AbstractUndoExecutor {
 
     /**
      * Undo prepare.
+     * Undo 准备参数
      *
      * @param undoPST    the undo pst
      * @param undoValues the undo values
@@ -163,6 +168,7 @@ public abstract class AbstractUndoExecutor {
 
     /**
      * Gets undo rows.
+     * 获取undo行
      *
      * @return the undo rows
      */
@@ -170,6 +176,7 @@ public abstract class AbstractUndoExecutor {
 
     /**
      * Data validation.
+     * 数据校验
      *
      * @param conn the conn
      * @return return true if data validation is ok and need continue undo, and return false if no need continue undo.
@@ -182,6 +189,7 @@ public abstract class AbstractUndoExecutor {
 
         // Compare current data with before data
         // No need undo if the before data snapshot is equivalent to the after data snapshot.
+        // 对比afterImage数据和beforeImage数据，一样就不需要undo
         Result<Boolean> beforeEqualsAfterResult = DataCompareUtils.isRecordsEquals(beforeRecords, afterRecords);
         if (beforeEqualsAfterResult.getResult()) {
             if (LOGGER.isInfoEnabled()) {
@@ -195,11 +203,13 @@ public abstract class AbstractUndoExecutor {
         // Validate if data is dirty.
         TableRecords currentRecords = queryCurrentRecords(conn);
         // compare with current data and after image.
+        // 对比当前数据和afterImage数据
         Result<Boolean> afterEqualsCurrentResult = DataCompareUtils.isRecordsEquals(afterRecords, currentRecords);
         if (!afterEqualsCurrentResult.getResult()) {
 
             // If current data is not equivalent to the after data, then compare the current data with the before 
             // data, too. No need continue to undo if current data is equivalent to the before data snapshot
+            // 如果当前数据库数据和afterImage不相等，对比beforeImage和当前数据库数据，如果一样，不需要继续undo
             Result<Boolean> beforeEqualsCurrentResult = DataCompareUtils.isRecordsEquals(beforeRecords, currentRecords);
             if (beforeEqualsCurrentResult.getResult()) {
                 if (LOGGER.isInfoEnabled()) {
@@ -209,6 +219,7 @@ public abstract class AbstractUndoExecutor {
                 // no need continue undo.
                 return false;
             } else {
+                // 检测到当前数据库数据和afterImage、beforeImage都不一样，及有脏数据存在
                 if (LOGGER.isInfoEnabled()) {
                     if (StringUtils.isNotBlank(afterEqualsCurrentResult.getErrMsg())) {
                         LOGGER.info(afterEqualsCurrentResult.getErrMsg(), afterEqualsCurrentResult.getErrMsgParams());
@@ -228,6 +239,7 @@ public abstract class AbstractUndoExecutor {
 
     /**
      * Query current records.
+     * 查询当前记录
      *
      * @param conn the conn
      * @return the table records
@@ -236,15 +248,15 @@ public abstract class AbstractUndoExecutor {
     protected TableRecords queryCurrentRecords(Connection conn) throws SQLException {
         TableRecords undoRecords = getUndoRows();
         TableMeta tableMeta = undoRecords.getTableMeta();
-        String pkName = tableMeta.getPkName();
-        int pkType = tableMeta.getColumnMeta(pkName).getDataType();
+        String pkName = tableMeta.getPkName(); // 主键
+        int pkType = tableMeta.getColumnMeta(pkName).getDataType(); // 主键类型
 
         // pares pk values
-        Object[] pkValues = parsePkValues(getUndoRows());
+        Object[] pkValues = parsePkValues(undoRecords);
         if (pkValues.length == 0) {
             return TableRecords.empty(tableMeta);
         }
-        StringBuffer replace = new StringBuffer();
+        StringBuilder replace = new StringBuilder();
         for (int i = 0; i < pkValues.length; i++) {
             replace.append("?,");
         }
@@ -281,6 +293,7 @@ public abstract class AbstractUndoExecutor {
 
     /**
      * Parse pk values object [ ].
+     * 解析主键值
      *
      * @param records the records
      * @return the object [ ]

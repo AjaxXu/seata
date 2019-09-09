@@ -25,6 +25,7 @@ import java.sql.Statement;
 
 /**
  * The type Execute template.
+ * 执行模板
  *
  * @author sharajava
  */
@@ -66,6 +67,7 @@ public class ExecuteTemplate {
 
         if (!RootContext.inGlobalTransaction() && !RootContext.requireGlobalLock()) {
             // Just work as original statement
+            // 如果不在全局事务或者没有全局锁，只执行本来的statement
             return statementCallback.execute(statementProxy.getTargetStatement(), args);
         }
 

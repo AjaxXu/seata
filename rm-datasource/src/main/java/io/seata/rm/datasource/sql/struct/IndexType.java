@@ -17,6 +17,7 @@ package io.seata.rm.datasource.sql.struct;
 
 /**
  * The enum Index type.
+ * 索引类型
  *
  * @author sharajava
  */

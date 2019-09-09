@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The type Collection utils.
+ * 集合辅助类
  *
  * @author zhangsen
  * @author Geng Zhang

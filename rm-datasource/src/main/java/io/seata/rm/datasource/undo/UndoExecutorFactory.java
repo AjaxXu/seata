@@ -27,6 +27,7 @@ import io.seata.rm.datasource.undo.oracle.OracleUndoUpdateExecutor;
 
 /**
  * The type Undo executor factory.
+ * Undo执行器工厂
  *
  * @author sharajava
  */
@@ -40,10 +41,10 @@ public class UndoExecutorFactory {
      * @return the undo executor
      */
     public static AbstractUndoExecutor getUndoExecutor(String dbType, SQLUndoLog sqlUndoLog) {
-        if (!dbType.equalsIgnoreCase(JdbcConstants.MYSQL)&&!dbType.equalsIgnoreCase(JdbcConstants.ORACLE)) {
+        if (!dbType.equalsIgnoreCase(JdbcConstants.MYSQL) && !dbType.equalsIgnoreCase(JdbcConstants.ORACLE)) {
             throw new NotSupportYetException(dbType);
         }
-          if(dbType.equalsIgnoreCase(JdbcConstants.ORACLE)) {
+        if (dbType.equalsIgnoreCase(JdbcConstants.ORACLE)) {
             switch (sqlUndoLog.getSqlType()) {
                 case INSERT:
                     return new OracleUndoInsertExecutor(sqlUndoLog);
@@ -55,16 +56,16 @@ public class UndoExecutorFactory {
                     throw new ShouldNeverHappenException();
             }
         } else {
-              switch (sqlUndoLog.getSqlType()) {
-                  case INSERT:
-                      return new MySQLUndoInsertExecutor(sqlUndoLog);
-                  case UPDATE:
-                      return new MySQLUndoUpdateExecutor(sqlUndoLog);
-                  case DELETE:
-                      return new MySQLUndoDeleteExecutor(sqlUndoLog);
-                  default:
-                      throw new ShouldNeverHappenException();
-              }
-          }
+            switch (sqlUndoLog.getSqlType()) {
+                case INSERT:
+                    return new MySQLUndoInsertExecutor(sqlUndoLog);
+                case UPDATE:
+                    return new MySQLUndoUpdateExecutor(sqlUndoLog);
+                case DELETE:
+                    return new MySQLUndoDeleteExecutor(sqlUndoLog);
+                default:
+                    throw new ShouldNeverHappenException();
+            }
+        }
     }
 }

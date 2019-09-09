@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The type Table meta cache.
+ * 表元数据缓存
  *
  * @author sharajava
  */
@@ -93,6 +94,7 @@ public class TableMetaCache {
 
     /**
      * Clear the table meta cache
+     * 更新表元数据缓存
      *
      * @param dataSourceProxy
      */
@@ -118,6 +120,7 @@ public class TableMetaCache {
         return fetchSchemeInDefaultWay(dataSource, tableName);
     }
 
+    // 获取默认的TableMeta
     private static TableMeta fetchSchemeInDefaultWay(DataSource dataSource, String tableName) throws SQLException {
         Connection conn = null;
         Statement stmt = null;
@@ -213,6 +216,7 @@ public class TableMetaCache {
         return tm;
     }
 
+    // 结果集和数据库元数据转为TableMeta
     private static TableMeta resultSetMetaToSchema(ResultSetMetaData rsmd, DatabaseMetaData dbmd, String tableName)
         throws SQLException {
         String schemaName = rsmd.getSchemaName(1);
@@ -221,7 +225,9 @@ public class TableMetaCache {
         TableMeta tm = new TableMeta();
         tm.setTableName(tableName);
 
+        // 列集合
         ResultSet rsColumns = dbmd.getColumns(catalogName, schemaName, tableName, "%");
+        // 索引集合
         ResultSet rsIndex = dbmd.getIndexInfo(catalogName, schemaName, tableName, false, true);
 
         try {

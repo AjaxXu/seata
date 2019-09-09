@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 
 /**
  * The type My sql undo update executor.
+ * MySQL undo 更新执行器
  *
  * @author sharajava
  */

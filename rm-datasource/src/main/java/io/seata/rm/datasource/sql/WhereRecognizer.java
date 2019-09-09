@@ -22,6 +22,7 @@ import io.seata.rm.datasource.ParametersHolder;
 
 /**
  * The interface Where recognizer.
+ * Where辨别者
  *
  * @author sharajava
  */

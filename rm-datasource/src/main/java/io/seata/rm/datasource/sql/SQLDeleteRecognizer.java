@@ -17,6 +17,7 @@ package io.seata.rm.datasource.sql;
 
 /**
  * The interface Sql delete recognizer.
+ * Sql 删除识别器接口
  *
  * @author sharajava
  */

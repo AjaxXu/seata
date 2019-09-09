@@ -17,6 +17,7 @@ package io.seata.rm.datasource.sql.struct;
 
 /**
  * The enum Key type.
+ * 键类型：主键、非主键
  *
  * @author sharajava
  */

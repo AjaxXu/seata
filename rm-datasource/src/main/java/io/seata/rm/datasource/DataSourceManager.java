@@ -52,6 +52,7 @@ import static io.seata.common.exception.FrameworkErrorCode.NoAvailableService;
 
 /**
  * The type Data source manager.
+ * 数据源的管理器
  *
  * @author sharajava
  */

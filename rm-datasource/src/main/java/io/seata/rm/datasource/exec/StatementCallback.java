@@ -20,6 +20,7 @@ import java.sql.Statement;
 
 /**
  * The interface Statement callback.
+ * Statement回调类
  *
  * @author sharajava
  *

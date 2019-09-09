@@ -26,6 +26,7 @@ import io.seata.core.context.RootContext;
 
 /**
  * The type Abstract statement proxy.
+ * statement代理的抽象类
  *
  * @author sharajava
  *

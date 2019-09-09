@@ -49,6 +49,7 @@ import static io.seata.core.exception.TransactionExceptionCode.BranchRollbackFai
 
 /**
  * The type Undo log manager.
+ * Undo 日志管理
  *
  * @author sharajava
  * @author Geng Zhang
@@ -109,6 +110,7 @@ public final class UndoLogManager {
 
     /**
      * Flush undo logs.
+     * 刷新undo logs
      *
      * @param cp the cp
      * @throws SQLException the sql exception
@@ -316,6 +318,7 @@ public final class UndoLogManager {
 
     }
 
+    // 根据create时间 删除undo log
     public static int deleteUndoLogByLogCreated(Date logCreated, String dbType, int limitRows, Connection conn) throws SQLException {
         assertDbSupport(dbType);
         PreparedStatement deletePST = null;
