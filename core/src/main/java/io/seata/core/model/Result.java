@@ -17,6 +17,7 @@ package io.seata.core.model;
 
 /**
  * Generic return result class
+ * 返回结果
  *
  * @author zjinlei
  */

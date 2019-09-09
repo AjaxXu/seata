@@ -81,6 +81,7 @@ public class RMHandlerAT extends AbstractRMHandler {
         }
     }
 
+    // 获取当前时间前saveDays时间
     private Date getLogCreated(int saveDays) {
         if (saveDays <= 0) {
             saveDays = UndoLogDeleteRequest.DEFAULT_SAVE_DAYS;

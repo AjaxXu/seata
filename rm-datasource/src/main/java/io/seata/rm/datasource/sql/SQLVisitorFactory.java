@@ -34,6 +34,7 @@ import java.util.List;
 
 /**
  * The type Sql visitor factory.
+ * Sql访问者工厂
  *
  * @author sharajava
  */
@@ -62,6 +63,7 @@ public class SQLVisitorFactory {
                 recognizer = new MySQLDeleteRecognizer(sql, ast);
             } else if (ast instanceof SQLSelectStatement) {
                 if (((SQLSelectStatement) ast).getSelect().getFirstQueryBlock().isForUpdate()) {
+                    // 如果是select ... for update
                     recognizer = new MySQLSelectForUpdateRecognizer(sql, ast);
                 }
             }
@@ -74,6 +76,7 @@ public class SQLVisitorFactory {
                 recognizer = new OracleDeleteRecognizer(sql, ast);
             } else if (ast instanceof SQLSelectStatement) {
                 if (((SQLSelectStatement) ast).getSelect().getQueryBlock().isForUpdate()) {
+                    // 如果是select ... for update
                     recognizer = new OracleSelectForUpdateRecognizer(sql, ast);
                 }
             }

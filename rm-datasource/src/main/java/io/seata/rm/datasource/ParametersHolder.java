@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 /**
  * The interface Parameters holder.
+ * 参数容器
  *
  * @author sharajava
  */

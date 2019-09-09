@@ -19,6 +19,7 @@ import io.seata.config.ConfigurationFactory;
 import io.seata.core.constants.ConfigurationKeys;
 
 /**
+ * Undo log常量
  * @author Geng Zhang
  */
 public class UndoLogConstants {

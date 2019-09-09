@@ -33,6 +33,7 @@ import java.util.List;
 
 /**
  * The type oralce undo insert executor.
+ * oracle undo 插入执行器
  * @author ccg
  * @date 2019/3/25
  */
@@ -47,14 +48,13 @@ public class OracleUndoInsertExecutor extends AbstractUndoExecutor {
             throw new ShouldNeverHappenException("Invalid UNDO LOG");
         }
         Row row = afterImageRows.get(0);
-        StringBuffer mainSQL = new StringBuffer("DELETE FROM " + keywordChecker.checkAndReplace(sqlUndoLog.getTableName()));
-        StringBuffer where = new StringBuffer(" WHERE ");
-        boolean first = true;
+        StringBuilder mainSQL = new StringBuilder("DELETE FROM " + keywordChecker.checkAndReplace(sqlUndoLog.getTableName()));
+        StringBuilder where = new StringBuilder(" WHERE ");
         for (Field field : row.getFields()) {
             if (field.getKeyType() == KeyType.PrimaryKey) {
                 where.append(keywordChecker.checkAndReplace(field.getName()) +" = ?");
+                break;
             }
-
         }
         return mainSQL.append(where).toString();
     }
@@ -75,6 +75,7 @@ public class OracleUndoInsertExecutor extends AbstractUndoExecutor {
 
     @Override
     protected TableRecords getUndoRows() {
+        // 对于插入来说，undo 行就是AfterImage
         return sqlUndoLog.getAfterImage();
     }
 }

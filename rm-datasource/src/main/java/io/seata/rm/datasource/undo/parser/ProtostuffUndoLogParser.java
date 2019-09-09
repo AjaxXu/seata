@@ -34,6 +34,7 @@ import io.seata.rm.datasource.undo.UndoLogParser;
 
 /**
  * The type protostuff based undo log parser.
+ * 基于protostuff的undo log解析器
  *
  * @author Geng Zhang
  */

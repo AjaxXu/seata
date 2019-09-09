@@ -26,6 +26,7 @@ import io.seata.rm.datasource.undo.SQLUndoLog;
 
 /**
  * The type Connection context.
+ * 连接上下文
  *
  * @author sharajava
  */

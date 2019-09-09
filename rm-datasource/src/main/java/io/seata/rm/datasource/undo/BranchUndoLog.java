@@ -19,6 +19,7 @@ import java.util.List;
 
 /**
  * The type Branch undo log.
+ * 分支undo log
  *
  * @author sharajava
  */

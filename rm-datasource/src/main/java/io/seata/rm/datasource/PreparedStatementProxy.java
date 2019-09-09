@@ -25,6 +25,7 @@ import io.seata.rm.datasource.exec.StatementCallback;
 
 /**
  * The type Prepared statement proxy.
+ * prepared statement代理类
  *
  * @author sharajava
  */
@@ -34,14 +35,6 @@ public class PreparedStatementProxy extends AbstractPreparedStatementProxy
     @Override
     public ArrayList<Object>[] getParameters() {
         return parameters;
-    }
-
-    private void init() throws SQLException {
-        int paramCount = targetStatement.getParameterMetaData().getParameterCount();
-        this.parameters = new ArrayList[paramCount];
-        for (int i = 0; i < paramCount; i++) {
-            parameters[i] = new ArrayList<>();
-        }
     }
 
     /**
@@ -55,17 +48,11 @@ public class PreparedStatementProxy extends AbstractPreparedStatementProxy
     public PreparedStatementProxy(AbstractConnectionProxy connectionProxy, PreparedStatement targetStatement,
                                   String targetSQL) throws SQLException {
         super(connectionProxy, targetStatement, targetSQL);
-        init();
     }
 
     @Override
     public boolean execute() throws SQLException {
-        return ExecuteTemplate.execute(this, new StatementCallback<Boolean, PreparedStatement>() {
-            @Override
-            public Boolean execute(PreparedStatement statement, Object... args) throws SQLException {
-                return statement.execute();
-            }
-        });
+        return ExecuteTemplate.execute(this, (statement, args) -> statement.execute());
     }
 
     @Override

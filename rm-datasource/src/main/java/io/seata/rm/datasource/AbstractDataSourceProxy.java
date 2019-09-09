@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 /**
  * The type Abstract data source proxy.
+ * 数据源代理的抽象类
  *
  * @author sharajava
  */
@@ -30,6 +31,7 @@ public abstract class AbstractDataSourceProxy implements DataSource {
 
     /**
      * The Target data source.
+     * 实际的数据源
      */
     protected DataSource targetDataSource;
 

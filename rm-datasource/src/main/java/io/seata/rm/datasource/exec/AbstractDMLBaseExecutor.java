@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The type Abstract dml base executor.
+ * dml 基本执行器的抽象类
  *
  * @author sharajava
  *
@@ -68,10 +69,10 @@ public abstract class AbstractDMLBaseExecutor<T, S extends Statement> extends Ba
      * @throws Exception the exception
      */
     protected T executeAutoCommitFalse(Object[] args) throws Exception {
-        TableRecords beforeImage = beforeImage();
-        T result = statementCallback.execute(statementProxy.getTargetStatement(), args);
-        TableRecords afterImage = afterImage(beforeImage);
-        prepareUndoLog(beforeImage, afterImage);
+        TableRecords beforeImage = beforeImage(); // 构建beforeImage
+        T result = statementCallback.execute(statementProxy.getTargetStatement(), args); // 执行sql
+        TableRecords afterImage = afterImage(beforeImage); // 构建afterImage
+        prepareUndoLog(beforeImage, afterImage); // 准备undo日志
         return result;
     }
 

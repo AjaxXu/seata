@@ -17,6 +17,7 @@ package io.seata.rm.datasource.sql;
 
 /**
  * The interface Sql recognizer.
+ * Sql辨别者接口
  *
  * @author sharajava
  */

@@ -30,6 +30,7 @@ import java.util.List;
 
 /**
  * The type oracle undo delete executor.
+ * oracle undo删除执行器
  * @author ccg
  * @date 2019/3/25
  */
@@ -54,14 +55,13 @@ public class OracleUndoDeleteExecutor extends AbstractUndoExecutor {
         }
         Row row = beforeImageRows.get(0);
 
-        StringBuffer insertColumns = new StringBuffer();
-        StringBuffer insertValues = new StringBuffer();
+        StringBuilder insertColumns = new StringBuilder();
+        StringBuilder insertValues = new StringBuilder();
         Field pkField = null;
         boolean first = true;
         for (Field field : row.getFields()) {
             if (field.getKeyType() == KeyType.PrimaryKey) {
                 pkField = field;
-                continue;
             } else {
                 if (first) {
                     first = false;
@@ -72,11 +72,8 @@ public class OracleUndoDeleteExecutor extends AbstractUndoExecutor {
                 insertColumns.append(keywordChecker.checkAndReplace(field.getName()));
                 insertValues.append("?");
             }
-
         }
-        if (first) {
-            first = false;
-        } else {
+        if (!first) {
             insertColumns.append(", ");
             insertValues.append(", ");
         }
@@ -88,6 +85,7 @@ public class OracleUndoDeleteExecutor extends AbstractUndoExecutor {
 
     @Override
     protected TableRecords getUndoRows() {
+        // 对于删除来说，undo 行就是beforeImage
         return sqlUndoLog.getBeforeImage();
     }
 }
