@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The type oralce select for update recognizer.
+ * The type oracle select for update recognizer.
  * oracle select for update识别器
  *
  * @author ccg

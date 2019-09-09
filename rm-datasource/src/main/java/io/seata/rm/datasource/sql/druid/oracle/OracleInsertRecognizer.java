@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The type oralce insert recognizer.
+ * The type oracle insert recognizer.
  * oracle 插入识别器
  * @author ccg
  * @date 2019/3/25

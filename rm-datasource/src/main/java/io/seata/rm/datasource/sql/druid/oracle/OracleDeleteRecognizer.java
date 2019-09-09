@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The type oralce delete recognizer.
+ * The type oracle delete recognizer.
  * oracle删除识别器
  *
  * @author ccg
