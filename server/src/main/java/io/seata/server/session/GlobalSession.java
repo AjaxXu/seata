@@ -31,6 +31,7 @@ import io.seata.core.model.BranchStatus;
 import io.seata.core.model.BranchType;
 import io.seata.core.model.GlobalStatus;
 import io.seata.server.UUIDGenerator;
+import io.seata.server.lock.LockerFactory;
 import io.seata.server.store.SessionStorable;
 import io.seata.server.store.StoreConfig;
 import org.slf4j.Logger;
@@ -74,6 +75,7 @@ public class GlobalSession implements SessionLifecycle, SessionStorable {
     private final ArrayList<BranchSession> branchSessions = new ArrayList<>();
 
     private GlobalSessionLock globalSessionLock = new GlobalSessionLock();
+
 
     /**
      * Add boolean.
@@ -175,10 +177,7 @@ public class GlobalSession implements SessionLifecycle, SessionStorable {
     }
 
     public void clean() throws TransactionException {
-        for (BranchSession branchSession : branchSessions) {
-            // 分支事务解锁
-            branchSession.unlock();
-        }
+        LockerFactory.getLockManager().releaseGlobalSessionLock(this);
     }
 
     /**
@@ -632,5 +631,9 @@ public class GlobalSession implements SessionLifecycle, SessionStorable {
     public interface LockCallable<V> {
 
         V call() throws TransactionException;
+    }
+
+    public ArrayList<BranchSession> getBranchSessions() {
+        return branchSessions;
     }
 }

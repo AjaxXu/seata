@@ -416,14 +416,14 @@ public class FileTransactionStoreManager extends AbstractTransactionStoreManager
     }
 
     private boolean writeDataFile(byte[] bs) {
-        if (bs == null) {
+        if (bs == null || bs.length >= Integer.MAX_VALUE - 3) {
             return false;
         }
         ByteBuffer byteBuffer = null;
 
-        if (bs.length + INT_BYTE_SIZE > MAX_WRITE_BUFFER_SIZE) {
+        if (bs.length + 4 > MAX_WRITE_BUFFER_SIZE) {
             //allocateNew
-            byteBuffer = ByteBuffer.allocateDirect(bs.length + INT_BYTE_SIZE);
+            byteBuffer = ByteBuffer.allocateDirect(bs.length + 4);
         } else {
             byteBuffer = writeBuffer;
             //recycle
